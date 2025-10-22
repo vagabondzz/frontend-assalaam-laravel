@@ -323,3 +323,76 @@
         </ul>
     </div>
 </aside>
+<!-- Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const token = localStorage.getItem("token"); 
+    if (!token) {
+        window.location.href = "/login";
+        return;
+    }
+
+    try {
+        const res = await axios.get("http://127.0.0.1:8001/api/auth/dashboardd", {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Accept": "application/json"
+            }
+        });
+        const user = res.data.user;
+        document.getElementById("user-name").innerText = user.name;
+        document.getElementById("user-avatar").src = user.profile_photo ?? 
+            "https://pas.assalaamhypermarket.co.id/images/default-avatar.png";
+    } catch (error) {
+        console.error("Gagal ambil profil:", error);
+        if (error.response && error.response.status === 401) {
+            window.location.href = "/login";
+        }
+    }
+
+    // Dropdown
+    const toggleBtn = document.getElementById("dropdown-toggle");
+    const menu = document.getElementById("dropdown-menu");
+    toggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menu.classList.toggle("hidden");
+    });
+    document.addEventListener("click", (e) => {
+        if (!menu.contains(e.target) && !toggleBtn.contains(e.target)) {
+            menu.classList.add("hidden");
+        }
+    });
+
+    // Dark Mode
+    const darkToggle = document.querySelector("input[onclick='toggleDarkMode()']");
+    if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark");
+        darkToggle.checked = true;
+    }
+    window.toggleDarkMode = function() {
+        if (darkToggle.checked) {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    }
+
+    // Burger + Overlay
+    const burgerBtn   = document.getElementById("burger-btn");
+    const sidebar     = document.getElementById("logo-sidebar");
+    const overlay     = document.getElementById("sidebar-overlay");
+
+    burgerBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("-translate-x-full");
+        overlay.classList.toggle("hidden");
+    });
+
+    overlay.addEventListener("click", () => {
+        sidebar.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+    });
+});
+</script>

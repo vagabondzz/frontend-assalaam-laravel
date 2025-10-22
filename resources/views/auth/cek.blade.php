@@ -21,20 +21,17 @@
                     <!-- Navbar menu content here -->
 
                     <li class="cursor-none"><span>
-                            <div class="flex cursor-none items-center -m-2 gap-2 p-1.5"><img
-                                    @if (Auth::check() && Auth::user()->profile_photo) <img src="{{ asset('storage/files/' . Auth::user()->profile_photo) }}"
-                                                        alt="{{ Auth::user()->name }}"
-                                                        class="inline-block relative object-cover object-center w-9 h-9 rounded-md">
-                                                @else
-                                                    <img src="{{ asset('images/generalUser.png') }}"
+                            <div class="flex cursor-none items-center -m-2 gap-2 p-1.5">
+                                   
+                                                    <img src="{{ asset('https://pas.assalaamhypermarket.co.id/images/generalUser.png') }}"
                                                         class="inline-block relative object-cover object-center w-9 h-9 rounded-md"
-                                                        alt="Default Profile Photo"> @endif
+                                                        alt="Default Profile Photo"> 
                                     <div>
                                 <p
                                     class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-semibold">
-                                    {{ Auth::user()->name }}</p>
+                                    </p>
                                 <p class="block antialiased font-sans text-xs font-normal text-blue-gray-500">
-                                    {{ Auth::user()->email }}</p>
+                                    </p>
                             </div>
             </div>
             </span></li>
@@ -60,22 +57,18 @@
                                     :class="{ 'bg-gray-600 text-white': isActive || open }" role="button"
                                     aria-haspopup="true" :aria-expanded="(open || isActive) ? 'true' : 'false'">
                                     <div class="flex items-center -m-2 gap-2 p-1.5 ">
-                                        @if (Auth::user()->profile_photo)
-                                            <img src="{{ asset('storage/files/' . Auth::user()->profile_photo) }}"
-                                                alt="{{ Auth::user()->name }}"
-                                                class="inline-block relative object-cover object-center w-9 h-9 rounded-md">
-                                        @else
-                                            <img src="{{ asset('images/generalUser.png') }}"
+                                       
+                                            <img src="{{ asset('https://pas.assalaamhypermarket.co.id/images/generalUser.png') }}"
                                                 class="inline-block relative object-cover object-center w-9 h-9 rounded-md"
                                                 alt="Default Profile Photo">
-                                        @endif
+                                     
                                         <div>
                                             <p
                                                 class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-semibold">
-                                                {{ Auth::user()->name }}</p>
+                                                </p>
                                             <p
                                                 class="block antialiased font-sans text-xs font-normal text-blue-gray-500">
-                                                {{ Auth::user()->email }}</p>
+                                               </p>
                                         </div>
                                     </div>
                                     <span aria-hidden="true" class="ml-auto">
@@ -92,7 +85,7 @@
                                     aria-label="Authentication">
                                     <!-- active & hover classes 'text-gray-700 dark:text-light' -->
                                     <!-- inActive classes 'text-gray-400 dark:text-gray-400' -->
-                                    <a href="{{ route('new-regis') }}" role="menuitem"
+                                    <a href="" role="menuitem"
                                         class="block p-2 hover:bg-gray-600 hover:text-white text-sm text-gray-900 transition-colors duration-200 rounded-md dark:hover:text-light">
                                         Register
                                     </a>

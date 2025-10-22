@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdn.rawgit.com/michalsnik/aos/2.3.1/dist/aos.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
-     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+     <link rel="icon" type="image/png" href="{{ asset('https://pas.assalaamhypermarket.co.id/images/logo.png') }}">
     <title>Assalaam PAS Member</title>
 
     <style>
@@ -30,78 +30,55 @@
 
 <body id="top" class="bg-gray-100 font-sans" x-data="{ open: false } scroll - smooth">
 
+<!--NAVBAR-->
+<nav class="bg-white bg-opacity-90 shadow-md sticky top-0 z-50 transition duration-300 ease-in-out"
+x-data="{ open: false }">
+<div class="container mx-auto flex justify-between items-center py-4 px-6">
+    <a href="/"><img src="{{ asset('https://pas.assalaamhypermarket.co.id/images/logoTeks.png') }}" alt="logo" class='w-40' /></a>
 
-    <!--NAVBAR-->
-    <nav class="bg-white bg-opacity-90 shadow-md sticky top-0 z-50 transition duration-300 ease-in-out"
-        x-data="{ open: false }">
-        <div class="container mx-auto flex justify-between items-center py-4 px-6">
-            <a href="/"><img src="{{ asset('images/logoTeks.png') }}" alt="logo" class='w-40' /></a>
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex space-x-10 ml-12">
+        <a href="#top" class="text-gray-800 hover:text-amber-600">Beranda</a>
+        <a href="#membership" class="text-gray-800 hover:text-amber-600">Membership</a>
+        <a href="#about" class="text-gray-800 hover:text-amber-600">Tentang Kami</a>
+    </div>
 
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex space-x-10 ml-12">
-                <a href="#top" class="text-gray-800 hover:text-amber-600">Beranda</a>
-                <a href="#membership" class="text-gray-800 hover:text-amber-600">Membership</a>
-                <a href="#about" class="text-gray-800 hover:text-amber-600">Tentang Kami</a>
-            </div>
-
-            <!-- Login/Belanja dan Hamburger Button -->
-            <div class="flex items-center space-x-4">
-
-
-                <a href="{{ route('login') }}">
-                    <button aria-label="Start Game"
-                        class="hidden md:block px-4 py-1 text-amber-600 hover:text-amber-500 font-semibold text-md rounded-xl shadow-xl transition-transform transform bg-transparent border-2 border-white hover:scale-105 hover:border-green-600 hover:shadow-green-500/50 hover:shadow-2xl focus:outline-none"
-                        id="startButton">
-                        Login
-                    </button>
-                </a>
-                <a href="{{ route('register') }}">
-                    <button aria-label="Start Game"
-                        class="hidden md:block px-4 py-1 text-amber-600 hover:text-amber-500 font-semibold text-md rounded-xl shadow-xl transition-transform transform bg-transparent border-2 border-white hover:scale-105 hover:border-green-600 hover:shadow-green-500/50 hover:shadow-2xl focus:outline-none"
-                        id="startButton">
-                        Register
-                    </button>
-                </a>
+    <!-- Login/Belanja dan Hamburger Button -->
+    <div class="flex items-center space-x-4">
 
 
-                <!-- Hamburger Button -->
-                <button id="hamburgerButton" class="block md:hidden text-gray-800 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
-            </div>
-        </div>
+        <a href="login">
+            <button aria-label="Start Game"
+                class="hidden md:block px-4 py-1 text-amber-600 hover:text-amber-500 font-semibold text-md rounded-xl shadow-xl transition-transform transform bg-transparent border-2 border-white hover:scale-105 hover:border-green-600 hover:shadow-green-500/50 hover:shadow-2xl focus:outline-none"
+                id="startButton">
+                Login
+            </button>
+        </a>
+        <a href="register">
+            <button aria-label="Start Game"
+                class="hidden md:block px-4 py-1 text-amber-600 hover:text-amber-500 font-semibold text-md rounded-xl shadow-xl transition-transform transform bg-transparent border-2 border-white hover:scale-105 hover:border-green-600 hover:shadow-green-500/50 hover:shadow-2xl focus:outline-none"
+                id="startButton">
+                Register
+    </button>
 
-        <!-- Mobile Menu -->
-        <div id="mobileMenu"
-            class="hidden fixed bg-green-50 shadow-xl w-full transition-all duration-300 ease-in-out transform -translate-y-full opacity-0">
-            <a href="#top" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Beranda</a>
-            <a href="#membership" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Membership</a>
-            <a href="#about" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Tentang Kami</a>
-            <a href="{{ route('login') }}" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Login</a>
-            <a href="{{ route('register') }}" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Register</a>
-        </div>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu"
+        class="hidden fixed bg-green-50 shadow-xl w-full transition-all duration-300 ease-in-out transform -translate-y-full opacity-0">
+        <a href="#top" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Beranda</a>
+        <a href="#membership" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Membership</a>
+        <a href="#about" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Tentang Kami</a>
+        <a href="" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Login</a>
+        <a href="" class="block px-4 py-2 text-gray-800 hover:text-amber-600">Register</a>
+    </div>
+</nav>
 
-    </nav>
-    <!--STYLE NAVBAR-->
-    <style>
-        body {
-            font-family: Poppins, sans-serif;
-        }
-
-        .navbar-blur {
-            backdrop-filter: blur(10px);
-            /* Menambahkan blur */
-            background-color: rgba(255, 255, 255, 0.8);
-            /* Latar belakang semi-transparan untuk efek blur */
-            transition: backdrop-filter 0.3s ease-in-out, background-color 0.3s ease-in-out;
-            /* Transisi */
-        }
-    </style>
-    <!--STYLE NAVBAR-->
+<!-- STYLE NAVBAR -->
+<style>
+    body {
+        font-family: Poppins, sans-serif;
+    }
+</style>
+<!-- END NAVBAR -->
     <!--NAVBAR-BLUR-SCROLL-->
     <script>
         window.addEventListener('scroll', function() {
@@ -119,7 +96,7 @@
 
     <!--HALAMAN UTAMA-->
     <section class="fade-in text-gray-200 text-center py-20 px-4 bg-cover bg-center"
-        style="background-image: linear-gradient(rgba(62, 58, 58, 0.5), rgba(51, 41, 41, 0.5)),  url('{{ asset('images/bg.jpg') }}'); background-size: cover; background-position: center;">
+        style="background-image: linear-gradient(rgba(62, 58, 58, 0.5), rgba(51, 41, 41, 0.5)),  url('{{ asset('https://pas.assalaamhypermarket.co.id/images/bg.jpg') }}'); background-size: cover; background-position: center;">
         <div id="beranda" data-aos="fade-up" class="container mx-auto">
             <h1
                 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-white to-green-600 animate-gradient">
@@ -176,10 +153,10 @@
 
     <!--HALAMAN MITRA-->
     <section class="fade-in text-white text-center py-16 mt-4 mx-4 rounded-lg px-4 bg-cover bg-center"
-        style="background-image: linear-gradient(rgba(99, 99, 99, 0.5), rgba(99, 99, 99, 0.5)), url('{{ asset('images/bgmitra.png') }}'); background-size: cover; background-position: center;">
+        style="background-image: linear-gradient(rgba(99, 99, 99, 0.5), rgba(99, 99, 99, 0.5)), url('{{ asset('https://pas.assalaamhypermarket.co.id/images/bgmitra.png') }}'); background-size: cover; background-position: center;">
         <div class="grid md:grid-cols-2 justify-center items-center gap-12 max-w-7xl mx-auto relative z-10">
             <div data-aos="zoom-in">
-                <img src="{{ asset('images/Partner.png') }}" alt="logo-partner"
+                <img src="{{ asset('https://pas.assalaamhypermarket.co.id/images/Partner.png') }}" alt="logo-partner"
                     class="w-9/12 mx-auto bg-orange-200 rounded-full shadow-2xl shadow-yellow-500/50" />
             </div>
             <div data-aos="zoom-in" class="max-md:text-center">
@@ -407,7 +384,7 @@
 
     <!--HALAMAN ECOMMERCE-->
     <section class="fade-in text-white text-center py-16 px-4 bg-cover bg-center"
-        style="background-image: linear-gradient(rgba(99, 99, 99, 0.5), rgba(99, 99, 99, 0.5)), url('{{ asset('images/bgg.jpg') }}'); background-size: cover; background-position: center;">
+        style="background-image: linear-gradient(rgba(99, 99, 99, 0.5), rgba(99, 99, 99, 0.5)), url('{{ asset('https://pas.assalaamhypermarket.co.id/images/bgg.jpg') }}'); background-size: cover; background-position: center;">
         <div class="max-w-7xl mx-auto relative px-4 lg:px-10 xl:px-20">
             <div data-aos="fade-up" class="text-center">
                 <div class="prose prose-slate max-w-none">
@@ -442,7 +419,7 @@
                                     <div
                                         class="bg-white rounded-3xl h-50 flex justify-center items-center mx-6 cursor-pointer group relative flex-col my-6 shadow-md border border-slate-200 hover:shadow-lg transition-shadow duration-300">
                                         <img class="transition-transform duration-500 ease-[cubic-bezier(0.25, 1, 0.5, 1)] transform group-hover:scale-110 rounded-2xl"
-                                            src="{{ asset('images/grab.jpg') }}" alt="logo" class='w-full' />
+                                            src="{{ asset('https://pas.assalaamhypermarket.co.id/images/grab.jpg') }}" alt="logo" class='w-full' />
                                     </div>
                                 </a>
                             </div>
@@ -453,7 +430,7 @@
                                     <div
                                         class="bg-white rounded-2xl h-50 flex justify-center items-center mx-6 cursor-pointer group relative flex-col my-6 shadow-md border border-slate-200 hover:shadow-lg transition-shadow duration-300">
                                         <img class="transition-transform duration-500 ease-[cubic-bezier(0.25, 1, 0.5, 1)] transform group-hover:scale-110 rounded-2xl"
-                                            src="{{ asset('images/AH-1.jpg') }}" alt="grab" class='w-full' />
+                                            src="{{ asset('https://pas.assalaamhypermarket.co.id/images/AH-1.jpg') }}" alt="grab" class='w-full' />
                                     </div>
                                 </a>
                             </div>
@@ -465,7 +442,7 @@
                                     <div
                                         class="bg-white rounded-2xl h-50 flex justify-center items-center mx-6 cursor-pointer group relative flex-col my-6 shadow-md border border-slate-200 hover:shadow-lg transition-shadow duration-300">
                                         <img class="transition-transform duration-500 ease-[cubic-bezier(0.25, 1, 0.5, 1)] transform group-hover:scale-110 rounded-2xl"
-                                            src="{{ asset('images/Tokopedia.jpg') }}" alt="logo"
+                                            src="{{ asset('https://pas.assalaamhypermarket.co.id/images/Tokopedia.jpg') }}" alt="logo"
                                             class='w-full' />
                                     </div>
                                 </a>
@@ -478,7 +455,7 @@
                                     <div
                                         class="bg-white rounded-2xl h-50 flex justify-center items-center mx-6 cursor-pointer group relative flex-col my-6 shadow-md border border-slate-200 hover:shadow-lg transition-shadow duration-300">
                                         <img class="transition-transform duration-500 ease-[cubic-bezier(0.25, 1, 0.5, 1)] transform group-hover:scale-110 rounded-2xl"
-                                            src="{{ asset('images/blibli.jpg') }}" alt="logo" class='w-full' />
+                                            src="{{ asset('https://pas.assalaamhypermarket.co.id/images/blibli.jpg') }}" alt="logo" class='w-full' />
                                     </div>
                                 </a>
                             </div>
@@ -489,7 +466,7 @@
                                     <div
                                         class="bg-white rounded-2xl h-50 flex justify-center items-center mx-6 cursor-pointer group relative flex-col my-6 shadow-md border border-slate-200 hover:shadow-lg transition-shadow duration-300">
                                         <img class="transition-transform duration-500 ease-[cubic-bezier(0.25, 1, 0.5, 1)] transform group-hover:scale-110 rounded-2xl"
-                                            src="{{ asset('images/Shopee.jpg') }}" alt="logo" class='w-full' />
+                                            src="{{ asset('https://pas.assalaamhypermarket.co.id/images/Shopee.jpg') }}" alt="logo" class='w-full' />
                                     </div>
                                 </a>
                             </div>
@@ -584,7 +561,7 @@
 
     <!--HALAMAN MEMBER & MAP-->
     <section class="fade-in text-white text-center py-16 px-4 bg-cover bg-center"
-        style="background-image: url('{{ asset('images/bg-member.jpg') }}'); background-size: cover; background-position: center;">
+        style="background-image: url('{{ asset('https://pas.assalaamhypermarket.co.id/images/bg-member.jpg') }}'); background-size: cover; background-position: center;">
         {{-- HALAMAN MEMBERSHIP --}}
         <div id="membership" class="px-4 sm:px-10">
             <div data-aos="fade-up" class="max-w-7xl mx-auto">
@@ -597,7 +574,7 @@
                     <div
                         class="w-fit-center px-3 py-4 mt-10 bg-white rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300 ease-in-out mx-3 mb-20">
                         <div class="text-center mt-2">
-                            <img src="{{ asset('images/kartu-pas.png') }}" class="my-6 w-50 mx-auto" />
+                            <img src="{{ asset('https://pas.assalaamhypermarket.co.id/images/kartu-pas.png') }}" class="my-6 w-50 mx-auto" />
                         </div>
                         <div class="px-6">
                             <p class="text-lg text-slate-950 leading-relaxed text-center font-bold"> APA ITU KARTU
@@ -695,7 +672,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
 
                 <div class="lg:col-span-2">
-                    <a href="/"><img src="{{ asset('images/logoTeks.png') }}" alt="logo"
+                    <a href="/"><img src="{{ asset('https://pas.assalaamhypermarket.co.id/images/logoTeks.png') }}" alt="logo"
                             class='w-44 mb-8' /></a>
                     <p class="text-gray-300 text-sm">Belanja Aman, Belanja Halal, Belanja Nyaman</p>
                     <p class="text-gray-300 text-sm">hanya dari rumah.</p>

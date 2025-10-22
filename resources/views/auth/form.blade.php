@@ -1,5 +1,5 @@
 @include('include.htmlstart')
-@include('include.sidebarstart')
+@include('include.sidemember')
 
 <div class=" w-full sm:ml-64">
     <div class="min-h-screen py-12 mt-10 px-4 sm:px-4 lg:px-6">
@@ -19,7 +19,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('simpan-form') }}" method="POST" class="p-8" enctype="multipart/form-data">
+                <form action="" method="POST" class="p-8" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <!-- Section: Personal Information -->
                     <div class="mb-10">

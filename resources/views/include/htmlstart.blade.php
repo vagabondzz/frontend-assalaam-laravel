@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" class="">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('https://pas.assalaamhypermarket.co.id//images/logo.png') }}">
     <title>Assalaam PAS Member</title>
   
-
+    
+    @vite('resources/css/app.css')
     @vite('resources/sass/app.scss')
     @vite('resources/js/app.js') 
     {{-- script --}}
+   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.5/cdn.min.js" defer></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -32,7 +34,7 @@
             display: none !important;
         }
     </style>
-
+<link href="/src/style.css" rel="stylesheet">
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia(
                 '(prefers-color-scheme: dark)').matches)) {
@@ -40,8 +42,7 @@
         } else {
             document.documentElement.classList.remove('dark')
         }
-    </script>
-    <script>
+   
         function openEditModal(user) {
             document.getElementById('modalUserId').value = user.id;
             document.getElementById('modalUserName').innerText = user.name;

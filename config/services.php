@@ -34,5 +34,17 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+      /*
+    |--------------------------------------------------------------------------
+    | Custom API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Base URL untuk koneksi ke API internal atau eksternal.
+    | Kamu bisa ubah nilainya dari file .env tanpa sentuh kode lagi.
+    |
+    */
+    'api' => [
+        'base_url' => env('API_BASE_URL', 'http://127.0.0.1:8001'),
+    ],
 
 ];

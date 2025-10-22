@@ -6,6 +6,8 @@
 
 // import './bootstrap';
 import '../css/app.css';
+import './api';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 /**
  * Next, we will create a fresh React component instance and attach it to
  * the page. Then, you may begin adding components to this application
