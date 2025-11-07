@@ -19,7 +19,7 @@
                     </div>
                 </div>
 
-                 <form x-data="form" class="p-8">
+                 <form x-data="form" class="p-8" autocomplete="off" autocapitalize="off" spellcheck="false">
     @csrf
 
     <!-- SECTION 1: PERSONAL AKUN -->
@@ -34,7 +34,7 @@
             <div class="relative group">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                 <div class="relative">
-                    <input type="email" name="email" id="email" placeholder="Masukan Email"
+                    <input type="email" name="email" id="email" placeholder="Masukan Email" autocomplete="off" autocorrect="off" autocapitalize="none"
                         class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
                 </div>
             </div>
@@ -43,7 +43,7 @@
             <div class="relative group">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
                 <div class="relative">
-                    <input type="password" name="password" id="password" placeholder="Masukan Password"
+                    <input type="password" name="password" id="password" placeholder="Masukan Password" autocomplete="new-password"
                         class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
                 </div>
             </div>
@@ -68,28 +68,28 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Nama -->
-            <input type="text" name="MEMBER_NAME" id="MEMBER_NAME" placeholder="Masukan Nama Lengkap" class="w-full px-4 py-3 rounded-lg border-2 ...">
+            <input type="text" name="MEMBER_NAME" id="MEMBER_NAME" placeholder="Masukan Nama Lengkap" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
 
             <!-- Tanggal Lahir -->
-            <input type="date" name="MEMBER_DATE_OF_BIRTH" id="MEMBER_DATE_OF_BIRTH" class="w-full px-4 py-3 rounded-lg border-2 ...">
+            <input type="date" name="MEMBER_DATE_OF_BIRTH" id="MEMBER_DATE_OF_BIRTH" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
 
             <!-- Tempat Lahir -->
-            <input type="text" name="MEMBER_PLACE_OF_BIRTH" id="MEMBER_PLACE_OF_BIRTH" placeholder="Masukan Tempat Lahir" class="w-full px-4 py-3 rounded-lg border-2 ...">
+            <input type="text" name="MEMBER_PLACE_OF_BIRTH" id="MEMBER_PLACE_OF_BIRTH" placeholder="Masukan Tempat Lahir" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4 gap-6">
             <!-- No Identitas -->
-            <input type="text" name="MEMBER_KTP_NO" id="MEMBER_KTP_NO" placeholder="Masukan No. Identitas" class="w-full px-4 py-3 rounded-lg border-2 ...">
+            <input type="text" name="MEMBER_KTP_NO" id="MEMBER_KTP_NO" placeholder="Masukan No. Identitas" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
 
             <!-- Status -->
-            <select name="MEMBER_IS_MARRIED" id="MEMBER_IS_MARRIED" class="w-full select rounded-lg border-2 ...">
+            <select name="MEMBER_IS_MARRIED" id="MEMBER_IS_MARRIED" class="w-full select rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
                 <option value="">Pilih Status</option>
                 <option value="0">Lajang</option>
                 <option value="1">Menikah</option>
             </select>
 
             <!-- Agama -->
-            <select name="REF$AGAMA_ID" id="REF$AGAMA_ID" class="w-full select rounded-lg border-2 ...">
+            <select name="REF$AGAMA_ID" id="REF$AGAMA_ID" class="w-full select rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
                 <option selected disabled>Pilih Agama</option>
                 <option value="1">Islam</option>
                 <option value="2">Kristen</option>
@@ -101,7 +101,7 @@
             </select>
 
             <!-- Kewarganegaraan -->
-            <select name="MEMBER_IS_WNI" id="MEMBER_IS_WNI" class="w-full select rounded-lg border-2 ...">
+            <select name="MEMBER_IS_WNI" id="MEMBER_IS_WNI" class="w-full select rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
                 <option selected disabled>Pilih Kewarganegaraan</option>
                 <option value="1">WNI (Warga Negara Indonesia)</option>
                 <option value="0">WNA (Warga Negara Asing)</option>
@@ -117,18 +117,18 @@
         </h3>
 
         <div class="space-y-6">
-            <input type="text" id="MEMBER_ADDRESS" name="MEMBER_ADDRESS" placeholder="Masukan Alamat Lengkap" class="w-full px-4 py-3 rounded-lg border-2 ...">
+            <input type="text" id="MEMBER_ADDRESS" name="MEMBER_ADDRESS" placeholder="Masukan Alamat Lengkap" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
 
             <!-- RT / RW -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <input type="text" id="MEMBER_RT" name="MEMBER_RT" placeholder="Masukan RT" class="w-full px-4 py-3 rounded-lg border-2 ...">
-                <input type="text" id="MEMBER_RW" name="MEMBER_RW" placeholder="Masukan RW" class="w-full px-4 py-3 rounded-lg border-2 ...">
-                <input type="text" id="MEMBER_KELURAHAN" name="MEMBER_KELURAHAN" placeholder="Masukan Kelurahan" class="w-full px-4 py-3 rounded-lg border-2 ...">
+                <input type="text" id="MEMBER_RT" name="MEMBER_RT" placeholder="Masukan RT" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+                <input type="text" id="MEMBER_RW" name="MEMBER_RW" placeholder="Masukan RW" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+                <input type="text" id="MEMBER_KELURAHAN" name="MEMBER_KELURAHAN" placeholder="Masukan Kelurahan" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
             </div>
 
-            <input type="text" id="MEMBER_KECAMATAN" name="MEMBER_KECAMATAN" placeholder="Masukan Kecamatan" class="w-full px-4 py-3 rounded-lg border-2 ...">
-            <input type="text" id="MEMBER_KOTA" name="MEMBER_KOTA" placeholder="Masukan Kota" class="w-full px-4 py-3 rounded-lg border-2 ...">
-            <input type="text" id="MEMBER_POST_CODE" name="MEMBER_POST_CODE" placeholder="Masukan Kode Pos" class="w-full px-4 py-3 rounded-lg border-2 ...">
+            <input type="text" id="MEMBER_KECAMATAN" name="MEMBER_KECAMATAN" placeholder="Masukan Kecamatan" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+            <input type="text" id="MEMBER_KOTA" name="MEMBER_KOTA" placeholder="Masukan Kota" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+            <input type="text" id="MEMBER_POST_CODE" name="MEMBER_POST_CODE" placeholder="Masukan Kode Pos" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
         </div>
     </div>
 
@@ -140,14 +140,24 @@
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <input type="tel" id="MEMBER_TELP" name="MEMBER_TELP" placeholder="Masukan No. HP" class="w-full px-4 py-3 rounded-lg border-2 ...">
-            <input type="text" id="MEMBER_JML_TANGGUNGAN" name="MEMBER_JML_TANGGUNGAN" placeholder="Masukan Jumlah Tanggungan" class="w-full px-4 py-3 rounded-lg border-2 ...">
-            <input type="text" id="MEMBER_PENDAPATAN" name="MEMBER_PENDAPATAN" placeholder="Masukan Pendapatan Perbulan" class="w-full px-4 py-3 rounded-lg border-2 ...">
-        </div>
+            <input type="tel" id="MEMBER_TELP" name="MEMBER_TELP" placeholder="Masukan No. HP" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+            <input
+  type="number"
+  id="MEMBER_JML_TANGGUNGAN"
+  name="MEMBER_JML_TANGGUNGAN"
+  placeholder="Masukan Jumlah Tanggungan"
+  min="0"
+  step="1"
+  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
 
-        <input type="text" id="MEMBER_NPWP" name="MEMBER_NPWP" placeholder="Masukan No. NPWP" class="w-full px-4 py-3 rounded-lg border-2 ...">
-        <input type="file" name="file" id="file" class="file-input file-input-primary border-2 text-sm ...">
-    </div>
+            <input type="text" id="MEMBER_PENDAPATAN" name="MEMBER_PENDAPATAN" placeholder="Masukan Pendapatan Perbulan" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+        </div>
+        <div class="space-y-6 mt-6">
+            <!-- NPWP -->
+
+        <input type="text" id="MEMBER_NPWP" name="MEMBER_NPWP" placeholder="Masukan No. NPWP" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+    </div>         
+    </div>         
 
     <!-- SUBMIT -->
     <div class="flex flex-wrap justify-end gap-4 pt-6 border-t border-gray-100">
@@ -175,7 +185,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector("form");
     const token = localStorage.getItem("jwt_token_cs");
-    const API_URL = "http://127.0.0.1:8001/api";
+    const API_URL = "{{ api_url('/api/auth/cs/add-user-member') }}";
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -183,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = new FormData(form);
 
         try {
-            const res = await axios.post(`${API_URL}/auth/cs/add-user-member`, formData, {
+            const res = await axios.post(API_URL, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": token ? `Bearer ${token}` : ""
@@ -222,6 +232,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     });
+    document.getElementById('MEMBER_JML_TANGGUNGAN').addEventListener('input', (e) => {
+  if (e.target.value < 0) e.target.value = 0;
+});
 });
 </script>
 

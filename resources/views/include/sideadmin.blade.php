@@ -77,14 +77,7 @@
                 </a>
             </li>
 
-            <!-- Upload Promo -->
-            <li>
-                <a href="/promoadmin"
-                    class="flex items-center p-2 rounded-xl transition duration-300 text-green-500 dark:text-[#F97300] hover:bg-green-600 hover:text-white">
-                    <ion-icon name="pricetags" class="w-5 h-5 ml-1"></ion-icon>
-                    <span class="ms-3">Upload Promo</span>
-                </a>
-            </li>
+          
 
             <!-- Register -->
             <li>

@@ -179,7 +179,8 @@
   </div>
 
 <!-- ===== GRID: Barcode + Grafik ===== -->
-<div class="grid sm:grid-cols-[1fr_2fr] gap-4 mt-6 px-4 sm:px-6 md:px-8">
+<div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 mt-6 px-4 sm:px-6 md:px-8">
+
   
   
 <div class="">
@@ -225,23 +226,31 @@
 }
 </style>
 
-  <!-- ===== Grafik Belanja ===== -->
-  <div
-    class="bg-white dark:bg-gray-950 rounded-xl shadow-md
-           border border-gray-300 dark:border-gray-700
-           p-4 sm:p-6 transition-colors
-           w-full h-[320px] sm:h-[350px]"
-  >
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-      <div>
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
-          Grafik Belanja Tahunan
-        </h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400" id="tahunSekarang"></p>
-      </div>
+ <!-- ===== Grafik Belanja ===== -->
+<div
+  class="bg-white dark:bg-gray-950 rounded-xl shadow-md
+         border border-gray-300 dark:border-gray-700
+         p-4 sm:p-6 transition-colors
+         w-full h-[320px] sm:h-[350px]"
+>
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+    <div>
+      <h3 id="chartTitle" class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+        Grafik Transaksi Tahun <span id="tahunSekarang"></span>
+      </h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400" id="chartDescription">
+        Total belanja & poin kamu selama tahun berjalan
+      </p>
     </div>
-    <div id="chart" class="w-full h-[250px] sm:h-[300px]"></div>
   </div>
+
+  <div
+    id="chart"
+    class="w-full h-[250px] sm:h-[300px] overflow-x-auto overflow-y-hidden"
+  >
+    <div id="chart-inner" class="min-w-[320px] sm:min-w-full"></div>
+  </div>
+</div>
 </div>
 
 <!-- ===== TABEL TRANSAKSI (DESKTOP / TABLET) ===== -->
@@ -251,15 +260,15 @@
          shadow-md border border-gray-300 dark:border-gray-700 
          transition-colors
          w-full max-w-[1200px] mx-auto
-         hidden sm:block"   <!-- ⬅️ penting: sembunyikan di HP -->
+         hidden md:block"> <!-- ⬅️ ubah sm:block jadi md:block -->
 
   <h2 class="text-center text-lg font-semibold text-gray-800 dark:text-gray-100 
              border-b border-gray-300 dark:border-gray-700 pb-3">
     Riwayat Transaksi
   </h2>
 
-  <div class="overflow-x-auto mt-3">
-    <table class="w-full text-sm text-left text-gray-700 dark:text-gray-100">
+  <div class="overflow-x-auto mt-3 w-full">
+    <table class="min-w-full text-sm text-left text-gray-700 dark:text-gray-100">
       <thead class="text-xs uppercase bg-gray-100 dark:bg-gray-800 dark:text-gray-200 border-b border-gray-300 dark:border-gray-700">
         <tr>
           <th class="px-6 py-3">No.</th>
@@ -289,10 +298,10 @@
   
 
   {{-- ================= TRANSAKSI MOBILE ================= --}}
-  <div
-    class="p-4 sm:px-6 md:px-8 my-4 block sm:hidden 
-           bg-white dark:bg-gray-950 
-           rounded-xl shadow-md border border-gray-300 dark:!border-gray-700 transition-colors">
+<div
+  class="p-4 sm:px-6 md:px-8 my-4 block md:hidden 
+         bg-white dark:bg-gray-950 
+         rounded-xl shadow-md border border-gray-300 dark:!border-gray-700 transition-colors w-full">
     <h2 class="text-center text-lg font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-300 dark:!border-gray-700 pb-3">
       Riwayat Transaksi
     </h2>
@@ -332,139 +341,47 @@
 <!-- ===== MAIN SCRIPT ===== -->
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
-  // ===== API URL & TOKEN =====
   const token = localStorage.getItem("jwt_token_user");
-  const apiDashboard = "{{ api_url('/api/auth/dashboard') }}";
-  const apiBarcode   = "{{ api_url('/api/auth/barcode') }}";
-  const apiQR        = "{{ api_url('/api/auth/qr') }}";
-  const apiResend = "{{ api_url('/api/email/resend') }}";
-
+  const api = {
+    dashboard: "{{ api_url('/api/auth/dashboard') }}",
+    barcode: "{{ api_url('/api/auth/barcode') }}",
+    qr: "{{ api_url('/api/auth/qr') }}",
+    resend: "{{ api_url('/api/email/resend') }}",
+  };
   const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
 
-  // ===== DOM ELEMENTS =====
-  const displayArea  = document.getElementById("displayArea");
-  const popupModal   = document.getElementById("popupModal");
-  const popupContent = document.getElementById("popupContent");
+  const el = {
+    displayArea: document.getElementById("displayArea"),
+    popupModal: document.getElementById("popupModal"),
+    popupContent: document.getElementById("popupContent"),
+    btnBarcode: document.getElementById("btnBarcode"),
+    btnQR: document.getElementById("btnQR"),
+    btnKartu: document.getElementById("btnKartu"),
+    greeting: document.getElementById("greeting"),
+    dashboardContent: document.getElementById("dashboardContent"),
+    noMemberNotice: document.getElementById("noMemberNotice"),
+    pendingNotice: document.getElementById("pendingMemberNotice"),
+    unverifiedNotice: document.getElementById("unverifiedEmailNotice"),
+  };
 
-  const btnBarcode = document.getElementById("btnBarcode");
-  const btnQR      = document.getElementById("btnQR");
-  const btnKartu   = document.getElementById("btnKartu");
-
-  // ===== EVENT LISTENER =====
-  btnBarcode?.addEventListener("click", loadBarcode);
-  btnQR?.addEventListener("click", loadQR);
-  btnKartu?.addEventListener("click", loadKartuPas);
-
-  popupModal.addEventListener("click", (e) => {
-    if (e.target === popupModal) popupModal.classList.add("hidden");
+  el.btnBarcode?.addEventListener("click", loadBarcode);
+  el.btnQR?.addEventListener("click", loadQR);
+  el.btnKartu?.addEventListener("click", loadKartuPas);
+  el.popupModal?.addEventListener("click", (e) => {
+    if (e.target === el.popupModal) el.popupModal.classList.add("hidden");
   });
 
-  // ===== LOAD BARCODE =====
-  async function loadBarcode() {
-    displayArea.innerHTML = `<p class="text-gray-400">Memuat barcode...</p>`;
-    try {
-      const res = await axios.get(apiBarcode, { ...authHeaders, responseType: "json" });
-      const barcode = res.data?.barcode;
-      if (!barcode) throw new Error("tidak ditemukan");
-
-      displayArea.innerHTML = `<img src="${barcode}" class="max-w-[200px] mx-auto" alt="Barcode"/>`;
-
-      popupContent.innerHTML = `
-        <div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-          <img src="${barcode}" alt="Barcode Besar" class="w-[350px] h-auto object-contain"/>
-        </div>`;
-      popupModal.classList.remove("hidden");
-    } catch {
-      displayArea.textContent = "Gagal memuat barcode";
-    }
-  }
-
-  // ===== LOAD QR CODE =====
-  async function loadQR() {
-    displayArea.innerHTML = `<p class="text-gray-400">Memuat QR...</p>`;
-    try {
-      const res = await axios.get(apiQR, { ...authHeaders, responseType: "text" });
-      if (!res.data) throw new Error("tidak ditemukan");
-
-      displayArea.innerHTML = res.data;
-      popupContent.innerHTML = `
-        <div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg flex justify-center">
-          ${res.data}
-        </div>`;
-      popupModal.classList.remove("hidden");
-    } catch {
-      displayArea.textContent = "Gagal memuat QR";
-    }
-  }
-
-  // ===== LOAD KARTU PAS =====
-  async function loadKartuPas() {
-    displayArea.innerHTML = `<p class="text-gray-400">Memuat Kartu PAS...</p>`;
-    try {
-      const [resMember, resBarcode] = await Promise.all([
-        axios.get(apiDashboard, authHeaders),
-        axios.get(apiBarcode, { ...authHeaders, responseType: "json" }),
-      ]);
-      const member = resMember.data.member;
-      const barcode = resBarcode.data.barcode;
-      const firstName = member.name.split(' ')[0];
-      if (!member || !barcode) throw new Error("Data tidak lengkap");
-
-     const cardSmall = `
-  <div class="relative w-full max-w-[340px] aspect-[5/3] bg-cover bg-center rounded-xl shadow-md overflow-hidden mx-auto"
-       style="background-image: url('/images/kartu_pas_template.png');">
-    <!-- Nama Member -->
-    <div class="absolute bottom-[36px] sm:bottom-[44px] left-[72%] sm:left-[76%] transform -translate-x-1/2 
-            text-[5vw] sm:text-[2vw] md:text-lg font-bold text-green-900 drop-shadow-md whitespace-nowrap">
-  ${firstName}
-</div>
-<!-- Barcode -->
-<div class="absolute bottom-[10px] sm:bottom-[11px] right-[13%] sm:right-[6%]
-            w-[30%] h-[16%] sm:w-[35%] sm:h-[20%]
-            bg-white/80 flex items-center justify-center rounded-md p-1">
-  <img src="${barcode}" class="w-full h-auto object-contain"/>
-</div>
-  </div>`;
-
-const cardLarge = `
-  <div class="relative w-[90vw] max-w-[650px] aspect-[5/3] bg-cover bg-center rounded-xl overflow-hidden mx-auto"
-       style="background-image: url('/images/kartu_pas_template.png');">
-    <!-- Nama Member -->
-    <div class="absolute sm:bottom-[25%] sm:left-[76%] bottom-[47px] left-[72%] transform -translate-x-1/2 
-                text-xl sm:text-2xl md:text-3xl font-bold text-green-900 drop-shadow-md whitespace-nowrap">
-      ${firstName}
-    </div>
-    <!-- Barcode -->
-    <div class="absolute sm:bottom-[6%] sm:right-[6%] bottom-[12px] right-[13%] sm:w-[35%] sm:h-[20%] w-[30%] h-[16%] 
-                bg-white/80 flex items-center justify-center rounded-md p-2">
-      <img src="${barcode}" class="w-full h-auto object-contain"/>
-    </div>
-  </div>`;
-
-
-      displayArea.innerHTML = cardSmall;
-      popupContent.innerHTML = cardLarge;
-      popupModal.classList.remove("hidden");
-    } catch (err) {
-      console.error(err);
-      displayArea.textContent = "Gagal memuat Kartu PAS";
-    }
-  }
-
-  // ===== FORMATTER =====
-  const formatRupiah = (angka) =>
+  const formatRupiah = (val) =>
     new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       notation: "compact",
       maximumFractionDigits: 1,
-    }).format(Number(angka) || 0);
+    }).format(Number(val) || 0);
 
-  // ===== GREETING =====
-  const hour = new Date().getHours();
-  const greetingEl = document.getElementById("greeting");
-  if (greetingEl) {
-    greetingEl.textContent =
+  if (el.greeting) {
+    const hour = new Date().getHours();
+    el.greeting.textContent =
       hour < 5
         ? "Selamat Dini Hari 🌙"
         : hour < 12
@@ -476,53 +393,186 @@ const cardLarge = `
         : "Selamat Malam 🌌";
   }
 
-  // ===== DASHBOARD FETCHING =====
-  try {
-    const res = await axios.get(apiDashboard, authHeaders);
-const d = res.data || {};
-const user = d.user || {}; // asumsikan API kirim info user termasuk verifikasi email
-const member = d.member || null;
-const trx = Array.isArray(d.transactions) ? d.transactions : [];
+  async function loadBarcode() { 
+    el.displayArea.innerHTML = `<p class="text-gray-400">Memuat barcode...</p>`;
+    try {
+      const { data } = await axios.get(api.barcode, { ...authHeaders });
+      if (!data?.barcode) throw new Error();
+      const barcode = data.barcode;
 
-
-    const dashboardContent = document.getElementById("dashboardContent");
-    const noMemberNotice = document.getElementById("noMemberNotice");
-    const pendingNotice = document.getElementById("pendingMemberNotice");
-    [dashboardContent, noMemberNotice, pendingNotice].forEach((el) => el?.classList.add("hidden"));
-
-     if (!member || !member.status || member.status === "Belum menjadi member") {
-    noMemberNotice?.classList.remove("hidden");
-    return;
+      el.displayArea.innerHTML = `<img src="${barcode}" class="max-w-[200px] mx-auto" alt="Barcode"/>`;
+      el.popupContent.innerHTML = `
+        <div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+          <img src="${barcode}" alt="Barcode Besar" class="w-[350px] h-auto object-contain"/>
+        </div>`;
+      el.popupModal.classList.remove("hidden");
+    } catch {
+      el.displayArea.textContent = "Gagal memuat barcode";
+    }
   }
-// ===== CEK VERIFIKASI EMAIL =====
-const unverifiedNotice = document.getElementById("unverifiedEmailNotice");
-if (!user.email_verified_at || user.email_verified_at === "null" || user.email_verified_at === null || user.email_verified_at === "") {
-  unverifiedNotice?.classList.remove("hidden");
-} else {
-  unverifiedNotice?.classList.add("hidden");
-}
+  async function loadQR() {
+    el.displayArea.innerHTML = `<p class="text-gray-400">Memuat QR...</p>`;
+    try {
+      const { data } = await axios.get(api.qr, { ...authHeaders, responseType: "text" });
+      if (!data) throw new Error();
 
+      el.displayArea.innerHTML = data;
+      el.popupContent.innerHTML = `
+        <div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg flex justify-center">
+          ${data}
+        </div>`;
+      el.popupModal.classList.remove("hidden");
+    } catch {
+      el.displayArea.textContent = "Gagal memuat QR";
+    }}
+  async function loadKartuPas() {  el.displayArea.innerHTML = `<p class="text-gray-400">Memuat Kartu PAS...</p>`;
+    try {
+      const [memberRes, barcodeRes] = await Promise.all([
+        axios.get(api.dashboard, authHeaders),
+        axios.get(api.barcode, authHeaders),
+      ]);
 
+      const member = memberRes.data?.member;
+      const barcode = barcodeRes.data?.barcode;
+      if (!member || !barcode) throw new Error();
+
+      const firstName = member.name?.split(" ")[0] || "";
+
+      const cardSmall = `
+        <div class="relative w-full max-w-[340px] aspect-[5/3] bg-cover bg-center rounded-xl shadow-md overflow-hidden mx-auto"
+             style="background-image: url('/images/kartu_pas_template.png');">
+          <div class="absolute bottom-[36px] sm:bottom-[44px] left-[72%] sm:left-[76%] transform -translate-x-1/2 
+                      text-[5vw] sm:text-[2vw] md:text-lg font-bold text-green-900 drop-shadow-md whitespace-nowrap">
+            ${firstName}
+          </div>
+          <div class="absolute bottom-[10px] sm:bottom-[11px] right-[13%] sm:right-[6%]
+                      w-[30%] h-[16%] sm:w-[35%] sm:h-[20%]
+                      bg-white/80 flex items-center justify-center rounded-md p-1">
+            <img src="${barcode}" class="w-full h-auto object-contain"/>
+          </div>
+        </div>`;
+
+      const cardLarge = `
+        <div class="relative w-[90vw] max-w-[650px] aspect-[5/3] bg-cover bg-center rounded-xl overflow-hidden mx-auto"
+             style="background-image: url('/images/kartu_pas_template.png');">
+          <div class="absolute sm:bottom-[25%] sm:left-[76%] bottom-[65px] left-[72%] transform -translate-x-1/2 
+                      text-xl sm:text-2xl md:text-3xl font-bold text-green-900 drop-shadow-md whitespace-nowrap">
+            ${firstName}
+          </div>
+          <div class="absolute sm:bottom-[6%] sm:right-[6%] bottom-[19px] right-[13%] sm:w-[35%] sm:h-[20%] w-[30%] h-[16%] 
+                      bg-white/80 flex items-center justify-center rounded-md p-2">
+            <img src="${barcode}" class="w-full h-auto object-contain"/>
+          </div>
+        </div>`;
+
+      el.displayArea.innerHTML = cardSmall;
+      el.popupContent.innerHTML = cardLarge;
+      el.popupModal.classList.remove("hidden");
+    } catch {
+      el.displayArea.textContent = "Gagal memuat Kartu PAS";
+    }
+  }
+
+  // ===== FETCH DASHBOARD =====
+  try {
+    const { data } = await axios.get(api.dashboard, authHeaders);
+    const d = data || {};
+    const user = d.user || {};
+    const member = d.member || null;
+    const trx = Array.isArray(d.transactions) ? d.transactions : [];
+
+    [el.dashboardContent, el.noMemberNotice, el.pendingNotice].forEach((x) =>
+      x?.classList.add("hidden")
+    );
+
+    if (!member || !member.status || member.status === "Belum menjadi member") {
+      el.noMemberNotice?.classList.remove("hidden");
+      return;
+    }
+
+    // ===== FITUR KUNCI OTOMATIS =====
+    const lockedSections = [
+      "#btnBarcode",
+      "#btnQR",
+      "#btnKartu",
+  
+    ];
+
+    function lockAllFeatures() {
+      lockedSections.forEach((sel) => {
+        const elx = document.querySelector(sel);
+        if (!elx) return;
+        elx.classList.add("opacity-40", "pointer-events-none", "select-none");
+        if (elx.tagName === "TABLE" || elx.tagName === "DIV") {
+          elx.innerHTML = `
+            <div class="p-4 text-center text-gray-500 border rounded-lg bg-gray-50 dark:bg-gray-800">
+              🔒 Fitur ini dikunci. Verifikasi email Anda untuk membuka akses.
+            </div>`;
+        }
+      });
+    }
+
+    function unlockAllFeatures() {
+      lockedSections.forEach((sel) => {
+        const elx = document.querySelector(sel);
+        if (!elx) return;
+        elx.classList.remove("opacity-40", "pointer-events-none", "select-none");
+      });
+    }
+
+    // Cek status verifikasi email
+    if (!user.email_verified_at) {
+      el.unverifiedNotice?.classList.remove("hidden");
+      lockAllFeatures();
+    } else {
+      el.unverifiedNotice?.classList.add("hidden");
+      unlockAllFeatures();
+    }
+    // ===== END FITUR KUNCI OTOMATIS =====
 
     if (member.status === "Pending") {
-      pendingNotice?.classList.remove("hidden");
+      el.pendingNotice?.classList.remove("hidden");
       document.getElementById("pendingStatus").textContent = member.status;
       document.getElementById("pendingName").textContent = member.name || "-";
       document.getElementById("pendingEmail").textContent = member.email || "-";
       return;
     }
 
-    if (member.status === "Aktif") dashboardContent?.classList.remove("hidden");
+    if (member.status === "Aktif")
+      el.dashboardContent?.classList.remove("hidden");
 
-    document.getElementById("userName").textContent = member.name ? " " + member.name + "!" : "";
+    const currentYear = new Date().getFullYear();
+    const trxTahunBerjalan = trx.filter((t) => {
+      let tanggal = t.created_at || t.date;
+      if (!tanggal) return false;
+      if (/^\d{2}-\d{2}-\d{4}$/.test(tanggal)) {
+        const [day, month, year] = tanggal.split("-");
+        tanggal = `${year}-${month}-${day}`;
+      }
+      const year = new Date(tanggal).getFullYear();
+      return year === currentYear;
+    });
+
+    const totalPoin = trxTahunBerjalan.reduce(
+      (s, t) => s + (parseFloat(t.point) || 0),
+      0
+    );
+    const totalKupon = trxTahunBerjalan.reduce(
+      (s, t) => s + (parseFloat(t.coupon) || 0),
+      0
+    );
+
+    document.getElementById("userName").textContent = member.name
+      ? " " + member.name + "!"
+      : "";
     document.getElementById("noMember").textContent = member.no_member
       ? "Dengan Nomor Member: " + member.no_member
       : "Belum menjadi member";
     document.getElementById("totalBelanja").textContent = formatRupiah(
-      trx.reduce((s, t) => s + (parseFloat(t.amount) || 0), 0)
+      trxTahunBerjalan.reduce((s, t) => s + (parseFloat(t.amount) || 0), 0)
     );
-    document.getElementById("totalPoin").textContent = d.total_poin || 0;
-    document.getElementById("totalKupon").textContent = d.total_kupon || 0;
+    document.getElementById("totalPoin").textContent = totalPoin;
+    document.getElementById("totalKupon").textContent = totalKupon;
 
     renderTransactionsDesktop(trx);
     renderTransactionsMobile(trx);
@@ -536,17 +586,19 @@ if (!user.email_verified_at || user.email_verified_at === "null" || user.email_v
     }
   }
 
-  // ======== RENDER FUNCTION (transaksi & chart) ========
+  // ...fungsi renderTransactionsDesktop/Mobile/All/chart/resendModal tetap sama...
+
+  
+
+  // ====== RENDER TRANSAKSI ======
   function renderTransactionsDesktop(trx) {
     const tbody = document.getElementById("transactionBody");
     if (!tbody) return;
-    tbody.innerHTML = "";
-    if (trx.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Belum ada transaksi</td></tr>`;
-      return;
-    }
-    trx.slice(0, 3).forEach((t, i) => {
-      tbody.innerHTML += `
+    tbody.innerHTML = trx.length
+      ? trx
+          .slice(0, 3)
+          .map(
+            (t, i) => `
         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
           <td class="px-6 py-3">${i + 1}</td>
           <td class="px-6 py-3">${t.id}</td>
@@ -554,20 +606,20 @@ if (!user.email_verified_at || user.email_verified_at === "null" || user.email_v
           <td class="px-6 py-3">${formatRupiah(t.amount)}</td>
           <td class="px-6 py-3">${t.point}</td>
           <td class="px-6 py-3">${t.coupon}</td>
-        </tr>`;
-    });
+        </tr>`
+          )
+          .join("")
+      : `<tr><td colspan="6" class="text-center py-4 text-gray-500">Belum ada transaksi</td></tr>`;
   }
 
   function renderTransactionsMobile(trx) {
     const container = document.getElementById("transactionListMobile");
     if (!container) return;
-    container.innerHTML = "";
-    if (trx.length === 0) {
-      container.innerHTML = `<p class="text-center text-gray-500">Belum ada transaksi</p>`;
-      return;
-    }
-    trx.slice(0, 3).forEach((t, i) => {
-      container.innerHTML += `
+    container.innerHTML = trx.length
+      ? trx
+          .slice(0, 3)
+          .map(
+            (t, i) => `
         <div class="p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm">
           <p><b>No:</b> ${i + 1}</p>
           <p><b>No. Transaksi:</b> ${t.id}</p>
@@ -575,20 +627,19 @@ if (!user.email_verified_at || user.email_verified_at === "null" || user.email_v
           <p><b>Total:</b> ${formatRupiah(t.amount)}</p>
           <p><b>Poin:</b> ${t.point}</p>
           <p><b>Kupon:</b> ${t.coupon}</p>
-        </div>`;
-    });
+        </div>`
+          )
+          .join("")
+      : `<p class="text-center text-gray-500">Belum ada transaksi</p>`;
   }
 
   function renderAllTransactions(trx) {
     const container = document.getElementById("allTransactionsList");
     if (!container) return;
-    container.innerHTML = "";
-    if (trx.length === 0) {
-      container.innerHTML = `<p class="text-center text-gray-500">Tidak ada transaksi</p>`;
-      return;
-    }
-    trx.forEach((t, i) => {
-      container.innerHTML += `
+    container.innerHTML = trx.length
+      ? trx
+          .map(
+            (t, i) => `
         <div class="p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm">
           <p><b>No:</b> ${i + 1}</p>
           <p><b>No. Transaksi:</b> ${t.id}</p>
@@ -596,46 +647,131 @@ if (!user.email_verified_at || user.email_verified_at === "null" || user.email_v
           <p><b>Total:</b> ${formatRupiah(t.amount)}</p>
           <p><b>Poin:</b> ${t.point}</p>
           <p><b>Kupon:</b> ${t.coupon}</p>
-        </div>`;
-    });
+        </div>`
+          )
+          .join("")
+      : `<p class="text-center text-gray-500">Tidak ada transaksi</p>`;
   }
 
   function renderChart(trx) {
-    if (!trx.length) return;
-    const categories = trx.map((t) => t.date);
-    const values = trx.map((t) => parseFloat(t.amount) || 0);
-    const points = trx.map((t) => parseFloat(t.point) || 0);
+  if (!trx.length) return;
 
-    const options = {
-      chart: { type: "line", height: "100%" },
-      series: [
-        { name: "Belanja", type: "column", data: values },
-        { name: "Poin", type: "line", data: points },
-      ],
-      xaxis: { categories },
-      yaxis: [{ labels: { formatter: (val) => formatRupiah(val) } }],
-      colors: ["#4f46e5", "#10b981"],
-    };
-    const chartContainer = document.querySelector("#chart");
-    if (!chartContainer) return;
+  const year = new Date().getFullYear();
+  document.getElementById("tahunSekarang").textContent = year;
+
+  const parseDate = (str) => {
+    const [day, month, year] = str.split("-");
+    return new Date(`${year}-${month}-${day}`);
+  };
+
+  const filtered = trx.filter((t) => {
+    const d = parseDate(t.date);
+    return d.getFullYear() === year;
+  });
+
+  if (!filtered.length) return;
+
+  const monthMap = {};
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+    "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+  ];
+
+  filtered.forEach((t) => {
+    const d = parseDate(t.date);
+    const month = monthNames[d.getMonth()];
+    if (!monthMap[month]) monthMap[month] = { amount: 0, point: 0 };
+    monthMap[month].amount += parseFloat(t.amount) || 0;
+    monthMap[month].point += parseFloat(t.point) || 0;
+  });
+
+  const categories = Object.keys(monthMap);
+  const values = categories.map((m) => monthMap[m].amount);
+  const points = categories.map((m) => monthMap[m].point);
+
+  const options = {
+    chart: {
+      type: "bar",
+      height: 300,
+      toolbar: { show: false },
+      animations: { enabled: true },
+      fontFamily: "Inter, sans-serif",
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "55%",
+        borderRadius: 6,
+      },
+    },
+    dataLabels: { enabled: false },
+    fill: {
+      opacity: 0.9,
+      gradient: {
+        shade: "light",
+        type: "vertical",
+        opacityFrom: 0.9,
+        opacityTo: 0.5,
+        stops: [0, 90, 100],
+      },
+    },
+    stroke: { show: false },
+    colors: ["#4f46e5", "#10b981"],
+    series: [
+      { name: "Belanja (Rp)", data: values },
+      { name: "Poin", data: points },
+    ],
+    xaxis: {
+      categories,
+      labels: { rotate: -45 },
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+    },
+    yaxis: {
+      labels: { formatter: (val) => formatRupiah(val) },
+    },
+    grid: {
+      borderColor: "#e5e7eb",
+      strokeDashArray: 4,
+      yaxis: { lines: { show: true } },
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+      y: {
+        formatter: (val, { seriesIndex }) =>
+          seriesIndex === 0 ? formatRupiah(val) : val + " poin",
+      },
+    },
+    legend: {
+      position: "top",
+      labels: { colors: "#4b5563" },
+    },
+  };
+
+  const chartContainer = document.querySelector("#chart");
+  if (chartContainer) {
     chartContainer.innerHTML = "";
     new ApexCharts(chartContainer, options).render();
   }
-  // ===== Modal =====
-  const modalWrapper = document.getElementById("modalAllTransactions");
-  document.getElementById("lihatSemuaBtn")?.addEventListener("click", ()=>modalWrapper.classList.remove("hidden"));
-  document.getElementById("lihatSemuaBtnMobile")?.addEventListener("click", ()=>modalWrapper.classList.remove("hidden"));
-  document.getElementById("closeModalBtn")?.addEventListener("click", ()=>modalWrapper.classList.add("hidden"));
-// ====== RESEND EMAIL VERIFIKASI ======
-document.getElementById("resendVerifyBtn")?.addEventListener("click", async () => {
-  try {
-    const res = await axios.post(apiResend, {}, authHeaders);
-    alert(res.data.message || "Email verifikasi telah dikirim ulang. Silakan cek inbox.");
-  } catch (err) {
-    console.error(err);
-    alert("Gagal mengirim ulang email verifikasi. Coba lagi nanti.");
-  }
-});
+}
 
+
+
+  // ====== RESEND EMAIL VERIFIKASI ======
+  document.getElementById("resendVerifyBtn")?.addEventListener("click", async () => {
+    try {
+      const res = await axios.post(api.resend, {}, authHeaders);
+      alert(res.data.message || "Email verifikasi telah dikirim ulang. Silakan cek inbox.");
+    } catch {
+      alert("Gagal mengirim ulang email verifikasi. Coba lagi nanti.");
+    }
+  });
+
+  // ====== MODAL SEMUA TRANSAKSI (tidak diubah) ======
+  const modalWrapper = document.getElementById("modalAllTransactions");
+  document.getElementById("lihatSemuaBtn")?.addEventListener("click", () => modalWrapper.classList.remove("hidden"));
+  document.getElementById("lihatSemuaBtnMobile")?.addEventListener("click", () => modalWrapper.classList.remove("hidden"));
+  document.getElementById("closeModalBtn")?.addEventListener("click", () => modalWrapper.classList.add("hidden"));
 });
 </script>

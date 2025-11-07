@@ -98,41 +98,76 @@
                         class="w-full text-xs text-gray-800 border border-gray-300 p-2 rounded-md outline-blue-600"
                         placeholder="Masukan ulang password" />
                 </div>
+    <!-- Wrapper utama dengan Alpine.js -->
+<!-- Bungkus seluruh komponen dengan Alpine -->
+<div x-data="{ open: false }">
 
-                {{-- Terms --}}
-                <div class="flex items-center mt-2">
-                    <input name="terms" id="terms" value="accepted" type="checkbox"
-                        class="h-4 w-4 shrink-0 border-gray-300 rounded" />
-                    <label for="terms" class="ml-3 block text-sm text-gray-800">
-                        Saya menyetujui
-                        <a href="#" class="text-blue-500 font-semibold hover:underline ml-1">Syarat dan
-                            Ketentuan</a>
-                    </label>
-                </div>
-
-                {{-- Area Notifikasi --}}
-                <div id="notif-area" class="mt-3 hidden">
-                    <p id="notif-text"
-                        class="text-xs text-center font-semibold py-2 rounded-md transition-all duration-300"></p>
-                </div>
-
-                {{-- Tombol --}}
-                <div class="mt-2 bg-amber-500 rounded-md hover:bg-amber-600 focus:outline-none">
-                    <button type="submit"
-                        class="w-full block text-center shadow-xl py-3 px-6 text-sm font-semibold text-white">
-                        Buat Akun
-                    </button>
-                </div>
-
-                <p class="text-sm mt-4 text-center text-gray-800">Sudah punya akun?
-                    <a href="login" class="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">
-                        Login disini
-                    </a>
-                </p>
-            </form>
+    <form id="registerForm" enctype="multipart/form-data">
+        {{-- Terms --}}
+        <div class="flex items-center mt-2">
+            <input name="terms" id="terms" value="accepted" type="checkbox"
+                class="h-4 w-4 shrink-0 border-gray-300 rounded" />
+            <label for="terms" class="ml-3 block text-sm text-gray-800">
+                Saya menyetujui
+                <a href="#" @click.prevent="open = true"
+                   class="text-blue-500 font-semibold hover:underline ml-1">
+                   Syarat dan Ketentuan
+                </a>
+            </label>
         </div>
+
+        {{-- Area Notifikasi --}}
+        <div id="notif-area" class="mt-3 hidden">
+            <p id="notif-text"
+               class="text-xs text-center font-semibold py-2 rounded-md transition-all duration-300"></p>
+        </div>
+
+        {{-- Tombol --}}
+        <div class="mt-2 bg-amber-500 rounded-md hover:bg-amber-600 focus:outline-none">
+            <button type="submit"   
+                class="w-full block text-center shadow-xl py-3 px-6 text-sm font-semibold text-white">
+                Buat Akun
+            </button>
+        </div>
+
+        <p class="text-sm mt-4 text-center text-gray-800">
+            Sudah punya akun?
+            <a href="login" class="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">
+                Login disini
+            </a>
+        </p>
+    </form>
+
+    <!-- 🧱 Modal DILUAR FORM (tidak trigger submit) -->
+    <div x-show="open"
+         x-transition.opacity
+         class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+         x-cloak>
+      <div @click.away="open = false"
+           class="bg-white rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-1/2 p-6 overflow-y-auto max-h-[80vh]">
+        <h2 class="text-xl font-semibold mb-2 text-gray-800">Syarat & Ketentuan</h2>
+
+        <div class="text-sm text-gray-700 space-y-2">
+          <p>1. Pengguna wajib mengisi data dengan benar dan sesuai identitas asli.</p>
+          <p>2. Data pribadi akan digunakan sesuai kebijakan privasi Assalaam Hypermarket.</p>
+          <p>3. Pengguna bertanggung jawab atas keamanan akun dan kata sandinya.</p>
+          <p>4. Pelanggaran terhadap ketentuan dapat mengakibatkan penonaktifan akun.</p>
+          <p>5. Assalaam Hypermarket berhak memperbarui ketentuan sewaktu-waktu.</p>
+        </div>
+
+        <div class="mt-4 text-right">
+          <!-- 🧠 Gunakan type="button" agar tidak ikut submit -->
+          <button type="button" @click="open = false"
+                  class="bg-amber-500 text-white px-4 py-2 rounded-md hover:bg-amber-600">
+            Tutup
+          </button>
+        </div>
+      </div>
     </div>
 </div>
+
+
+
 
 @include('include.htmlend')
 
@@ -142,7 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("registerForm");
     const notifArea = document.getElementById("notif-area");
     const notifText = document.getElementById("notif-text");
-    const API_URL        = "{{ api_url('/api/auth/register') }}";
+    const submitBtn = form.querySelector("button[type='submit']");
+    const API_URL = "{{ api_url('/api/auth/register') }}";
 
     function showNotif(text, color) {
         notifText.textContent = text;
@@ -153,6 +189,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        // Disable tombol & tampilkan spinner
+        submitBtn.disabled = true;
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = `
+            <div class="flex items-center justify-center gap-2">
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+                Sedang diproses...
+            </div>
+        `;
+
         const formData = new FormData(form);
 
         // Sesuaikan field
@@ -166,11 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const res = await fetch(API_URL, {
-                method: "POST",
-                body: formData
-            });
-
+            const res = await fetch(API_URL, { method: "POST", body: formData });
             const data = await res.json();
 
             // Validasi gagal
@@ -184,35 +231,37 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
                 showNotif(msg, "bg-red-100 text-red-600");
-                return;
-            }
-
+            } 
             // Member sudah punya akun
-            if (res.status === 409) {
+            else if (res.status === 409) {
                 showNotif(data.message || "Member ini sudah memiliki akun.", "bg-red-100 text-red-600");
-                return;
-            }
-
+            } 
             // Error server
-            if (res.status >= 500) {
+            else if (res.status >= 500) {
                 showNotif("Terjadi kesalahan server. Coba lagi nanti.", "bg-red-100 text-red-600");
-                return;
-            }
-
+            } 
             // Sukses
-            if (res.ok && data.success) {
+            else if (res.ok && data.success) {
                 showNotif("Registrasi berhasil! Mengalihkan ke halaman login...", "bg-green-100 text-green-600");
                 setTimeout(() => window.location.href = "/login", 2000);
-            } else {
+            } 
+            // Gagal lain
+            else {
                 showNotif(data.message || "Registrasi gagal.", "bg-red-100 text-red-600");
             }
 
         } catch (err) {
             console.error(err);
             showNotif("Gagal terhubung ke server. Pastikan backend aktif.", "bg-red-100 text-red-600");
+        } finally {
+            // Kembalikan tombol normal
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
     });
 });
 </script>
 
 <script>AOS.init();</script>
+<!-- End Script Register -->
+ @include('include.htmlend') 
