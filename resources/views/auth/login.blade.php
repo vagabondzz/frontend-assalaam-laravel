@@ -93,6 +93,10 @@
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                         </svg>
                     </button>
+                     <p class="text-sm mt-8 text-center text-gray-800">Belum punya akun? <a href="{{ route('register') }}"
+                        class="text-amber-600 font-bold hover:underline ml-1 whitespace-nowrap">Daftar
+                        sekarang</a>
+                </p>
                 </div>
             </form>
         </div>
@@ -170,54 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const apiForgot   = "{{ api_url('/api/auth/forgot-password') }}";
      
 
-    /* ===============================
-       👁️ Toggle Show/Hide Password
-    =============================== */
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("password");
-    const eyeIcon = document.getElementById("eyeIcon");
-
-    const eyeOpen = `
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M2.458 12C3.732 7.943 7.523 5 12 5
-                 c4.478 0 8.268 2.943 9.542 7
-                 -1.274 4.057-5.064 7-9.542 7
-                 -4.477 0-8.268-2.943-9.542-7z" />
-        <circle cx="12" cy="12" r="3" />
-    `;
-
-    const eyeClosed = `
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M3.98 8.223A10.477 10.477 0 001.5 12
-                 C2.772 16.057 6.563 19 11.04 19
-                 c1.758 0 3.44-.463 4.9-1.275
-                 m2.63-2.022A10.451 10.451 0 0020.5 12
-                 c-1.273-4.057-5.063-7-9.541-7
-                 -1.741 0-3.389.416-4.86 1.157M15 12
-                 a3 3 0 11-6 0 3 3 0 016 0z" />
-    `;
-
-    const showPassword = () => {
-        passwordInput.type = "text";
-        eyeIcon.innerHTML = eyeOpen;
-    };
-
-    const hidePassword = () => {
-        passwordInput.type = "password";
-        eyeIcon.innerHTML = eyeClosed;
-    };
-
-    // Desktop events
-    togglePassword.addEventListener("mousedown", showPassword);
-    togglePassword.addEventListener("mouseup", hidePassword);
-    togglePassword.addEventListener("mouseleave", hidePassword);
-
-    // Mobile events
-    togglePassword.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        showPassword();
-    });
-    togglePassword.addEventListener("touchend", hidePassword);
 
     /* ===============================
        🧠 Remember Email (Cookie)
@@ -313,6 +269,25 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         handleForgotPassword(forgotEmail.value, forgotMember.value);
     });
+      document.getElementById('togglePassword').addEventListener('click', () => {
+    const input = document.getElementById('password');
+    const icon = document.getElementById('eyeIcon');
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    icon.innerHTML = isHidden
+      ? `<path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.658-3.11m3.153-2.38A9.98 9.98 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.98 9.98 0 01-4.133 4.487M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>`
+      : `<path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/><circle cx="12" cy="12" r="3"/>`;
+});
+
+document.getElementById('toggleConfirmPassword').addEventListener('click', () => {
+    const input = document.getElementById('confirmPassword');
+    const icon = document.getElementById('eyeConfirmIcon');
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    icon.innerHTML = isHidden
+      ? `<path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.658-3.11m3.153-2.38A9.98 9.98 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.98 9.98 0 01-4.133 4.487M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>`
+      : `<path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/><circle cx="12" cy="12" r="3"/>`;
+});
 });
 </script>
 

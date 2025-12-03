@@ -95,11 +95,15 @@
                     </button>
 
                     <div x-show="open" x-transition class="mt-2 space-y-2 px-7">
-                        <a href="{{ route('table-calon') }}" class="flex items-center p-2 rounded-lg transition hover:bg-green-600 hover:text-white">
+                        <a href="{{ route('table-calon') }}" class="flex items-center p-2 rounded-lg transition hover:bg-green-600 hover:text-gray-50">
                             <ion-icon class="w-5 h-5" name="person-add-sharp"></ion-icon>
                             <span class="ms-3">Data Calon Member</span>
                         </a>
-                        <a href="/table-akun" class="flex items-center p-2 rounded-lg transition hover:bg-green-600 hover:text-white">
+                        <a href="/table-akun" class="flex items-center p-2 rounded-lg transition hover:bg-green-600 hover:text-gray-50">
+                            <i class="fa-solid fa-address-card w-5 h-5"></i>
+                            <span class="ms-3">Data Member</span>
+                        </a>
+                         <a href="/table-belumverif" class="flex items-center p-2 rounded-lg transition hover:bg-green-600 hover:text-gray-50">
                             <i class="fa-solid fa-address-card w-5 h-5"></i>
                             <span class="ms-3">Data Akun</span>
                         </a>

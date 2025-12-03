@@ -204,6 +204,8 @@
         </div>
     </div>
 </div>
+<!-- TOAST CONTAINER -->
+<div id="toastContainer" class="fixed top-5 right-5 z-50 space-y-3"></div>
 
 <script>
 document.getElementById('toggleSidebar')?.addEventListener('click', () => {
@@ -214,9 +216,13 @@ const photoInput = document.getElementById('profilePhoto');
 const photoPreview = document.getElementById('photoPreview');
 const sizeWarning = document.getElementById('sizeWarning');
 let compressedFile = null;
-const apiDashboard = "{{ api_url('/api/auth/dashboard') }}";
-const apiSend   = "{{ api_url('/api/guest/send') }}";
 
+const apiDashboard = "{{ api_url('/api/auth/dashboard') }}";
+const apiSend = "{{ api_url('/api/guest/send') }}";
+
+/* ===============================
+   FOTO PROFIL (Preview & Compress)
+   =============================== */
 photoInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -229,7 +235,12 @@ photoInput.addEventListener('change', async (e) => {
 
     if (file.size > 200 * 1024) {
         sizeWarning.classList.remove('hidden');
-        sizeWarning.innerHTML = `Ukuran foto melebihi 200KB. <button id="compressBtn" class="text-blue-500 underline">Lanjut</button> atau <button id="replaceBtn" class="text-blue-500 underline">Ganti Foto</button>`;
+        sizeWarning.innerHTML = `
+            Ukuran foto melebihi 200KB. 
+            <button id="compressBtn" class="text-blue-500 underline">Lanjut</button> 
+            atau 
+            <button id="replaceBtn" class="text-blue-500 underline">Ganti Foto</button>
+        `;
         document.getElementById('compressBtn').onclick = async () => {
             compressedFile = await compressImage(file);
             sizeWarning.textContent = "Foto dikompres otomatis menjadi ≤200KB.";
@@ -245,6 +256,49 @@ photoInput.addEventListener('change', async (e) => {
         compressedFile = file;
     }
 });
+
+function showToast(message, type = "success") {
+    const container = document.getElementById("toastContainer");
+
+    // Wrapper toast
+    const toast = document.createElement("div");
+    toast.className = `
+        flex items-start gap-3 p-4 rounded-xl shadow-lg border
+        backdrop-blur-md bg-white/80 dark:bg-gray-900/80
+        transform transition-all duration-300 opacity-0 translate-x-5
+    `;
+
+    // Warna kiri
+    const colorClass = type === "success" ? "bg-green-500" : "bg-red-500";
+
+    toast.innerHTML = `
+        <div class="w-2 rounded-full ${colorClass}"></div>
+        <div class="flex-1 text-sm text-gray-800 dark:text-gray-100">
+            ${message}
+        </div>
+        <button class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-xs">
+            ✕
+        </button>
+    `;
+
+    // Tombol close
+    toast.querySelector("button").onclick = () => closeToast();
+
+    container.appendChild(toast);
+
+    // Animasi masuk
+    setTimeout(() => {
+        toast.classList.remove("opacity-0", "translate-x-5");
+    }, 50);
+
+    // Auto close
+    const closeToast = () => {
+        toast.classList.add("opacity-0", "translate-x-5");
+        setTimeout(() => toast.remove(), 2000);
+    };
+
+    setTimeout(closeToast, 40000);
+}
 
 async function compressImage(file) {
     return new Promise((resolve) => {
@@ -265,20 +319,92 @@ async function compressImage(file) {
         reader.readAsDataURL(file);
     });
 }
+/* ===============================
+   FORCE NUMERIC INPUT ONLY
+   =============================== */
+function forceNumericOnly(input) {
+    input.addEventListener("input", () => {
+        input.value = input.value.replace(/\D/g, ""); // Hanya angka
+    });
+}
 
+/* ===============================
+   VALIDASI FORM & SUBMIT
+   =============================== */
 document.addEventListener("DOMContentLoaded", async () => {
+     /* Bikin input hanya menerima angka */
+    forceNumericOnly(document.querySelector('input[name="MEMBER_KTP_NO"]'));
+    forceNumericOnly(document.querySelector('input[name="MEMBER_TELP"]'));
+    forceNumericOnly(document.querySelector('input[name="MEMBER_RT"]'));
+    forceNumericOnly(document.querySelector('input[name="MEMBER_RW"]'));
+    forceNumericOnly(document.querySelector('input[name="MEMBER_POST_CODE"]'));
+    forceNumericOnly(document.querySelector('input[name="MEMBER_JML_TANGGUNGAN"]'));
+    forceNumericOnly(document.querySelector('input[name="MEMBER_PENDAPATAN"]'));
     const token = localStorage.getItem("jwt_token_user");
+
+    // Ambil data user dari dashboard API
     try {
         const res = await axios.get(apiDashboard, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        if (res.data.user?.name) document.getElementById("MEMBER_NAME").value = res.data.user.name;
+        if (res.data.user?.name) {
+            document.getElementById("MEMBER_NAME").value = res.data.user.name;
+        }
     } catch (err) {
         console.error("Gagal ambil data user:", err.response?.data || err.message);
     }
 
+    // Input referensi
+    const ktpInput = document.querySelector('input[name="MEMBER_KTP_NO"]');
+    const telpInput = document.querySelector('input[name="MEMBER_TELP"]');
+    const submitBtn = document.querySelector('button[type="submit"]');
+
+    // Tambahkan pesan error
+    const ktpError = document.createElement("p");
+    ktpError.className = "text-red-500 text-sm mt-1";
+    ktpInput.parentNode.appendChild(ktpError);
+
+    const telpError = document.createElement("p");
+    telpError.className = "text-red-500 text-sm mt-1";
+    telpInput.parentNode.appendChild(telpError);
+
+    // Validasi input
+    function validateInputs() {
+        let valid = true;
+
+        // KTP wajib 16 digit angka
+        if (ktpInput.value.length !== 16 || !/^\d+$/.test(ktpInput.value)) {
+            ktpError.textContent = "Nomor KTP harus tepat 16 digit angka.";
+            valid = false;
+            ktpInput.classList.add("border-red-500");
+        } else {
+            ktpError.textContent = "";
+            ktpInput.classList.remove("border-red-500");
+        }
+
+        // Nomor HP maksimal 9 digit
+        if (telpInput.value.length < 9 || !/^\d*$/.test(telpInput.value)) {
+            telpError.textContent = "Nomor HP minimal 9 digit angka.";
+            valid = false;
+            telpInput.classList.add("border-red-500");
+        } else {
+            telpError.textContent = "";
+            telpInput.classList.remove("border-red-500");
+        }
+
+        submitBtn.disabled = !valid;
+        submitBtn.classList.toggle("opacity-50", !valid);
+        return valid;
+    }
+
+    ktpInput.addEventListener("input", validateInputs);
+    telpInput.addEventListener("input", validateInputs);
+
+    // Kirim data ke API
     document.getElementById("memberForm").addEventListener("submit", async (e) => {
         e.preventDefault();
+        if (!validateInputs()) return;
+
         const formData = new FormData(e.target);
         if (compressedFile) {
             formData.set("profile_photo", compressedFile, compressedFile.name);
@@ -291,11 +417,26 @@ document.addEventListener("DOMContentLoaded", async () => {
                     "Authorization": `Bearer ${token}`
                 }
             });
-            alert("Pendaftaran berhasil!");
-            window.location.href = "/new-dashboard";
+           showToast("Pendaftaran berhasil!", "success");
+            setTimeout(() => {
+        window.location.href = "/new-dashboard";
+}, 1500);
+
         } catch (err) {
-            console.error("Error submit:", err.response?.data || err.message);
-            alert("Terjadi kesalahan saat mengirim data.");
+           let errMsg = "Terjadi kesalahan.";
+
+if (err.response?.data?.message) {
+    errMsg = err.response.data.message;
+} else if (err.response?.status === 401) {
+    errMsg = "Sesi login habis. Silakan login ulang.";
+} else if (err.response?.status === 422) {
+    errMsg = "Validasi gagal. Periksa kembali form input.";
+} else if (err.response?.status === 500) {
+    errMsg = "Server sedang bermasalah, coba beberapa saat lagi.";
+}
+
+showToast(errMsg, "error");
+
         }
     });
 });

@@ -1,13 +1,12 @@
 @include('include.htmlstart')
 @include('include.sidemember')
 @include('include.sayhi')
-<!-- ======= BELUM VERIFIKASI EMAIL ======= -->
 
   
 <!-- ======= BELUM MEMBER ======= -->
-<div id="noMemberNotice" 
-     class="hidden w-full sm:ml-64 min-h-screen flex items-center justify-center 
-            bg-gray-50 dark:bg-gray-950 px-4 transition-colors">
+<div id="noMemberNotice"
+     class="hidden w-full sm:ml-64 min-h-screen flex items-center justify-center
+            bg-gray-50 dark:bg-gray-800 px-4 transition-colors">
   <div class="max-w-md w-full bg-green-50 border border-green-300 text-green-800 
               dark:bg-green-900 dark:text-green-100 dark:border-green-700 
               p-6 rounded-2xl shadow-lg text-center">
@@ -19,17 +18,18 @@
       Silakan isi formulir pendaftaran member untuk mendapatkan berbagai keuntungan spesial!
     </p>
     <a href="/form-member"
-       class="inline-block bg-green-500 hover:bg-green-600 text-white text-sm font-medium 
+       class="inline-block bg-green-500 hover:bg-green-600 text-gray-50 text-sm font-medium 
               px-5 py-2 rounded-lg transition-all shadow">
       Isi Formulir Member
     </a>
   </div>
 </div>
 
+
 <!-- ======= PENDING MEMBER ======= -->
 <div id="pendingMemberNotice" 
-     class="hidden w-full sm:ml-64 min-h-screen flex items-center justify-center 
-            bg-gray-50 dark:bg-gray-950 px-4 transition-colors">
+     class="hidden w-full sm:ml-64 min-h-screen flex items-center justify-center
+            bg-gray-50 dark:bg-gray-800 px-4 transition-colors">
   <div class="max-w-md w-full bg-green-50 border border-green-300 text-green-800 
               dark:bg-green-900 dark:text-green-100 dark:border-green-700 
               p-6 rounded-2xl shadow-lg text-center">
@@ -40,7 +40,7 @@
     <h2 class="text-xl font-bold mb-2">Member Kamu Masih Menunggu Validasi Nih!</h2>
     <p class="text-sm mb-5">Mohon menunggu atau bisa hubungi pihak CS ya ☕</p>
 
-    <div class="bg-white dark:bg-900 text-left p-4 rounded-lg border border-gray-200 
+    <div class="bg-gray-50 dark:bg-900 text-left p-4 rounded-lg border border-gray-200 
                 dark:border-gray-700 shadow-inner">
       <h3 class="font-semibold mb-2 text-gray-700 dark:text-gray-100">Informasi Member</h3>
       <p class="text-sm"><strong>Status:</strong> <span id="pendingStatus" class="text-yellow-600 font-bold "></span></p>
@@ -60,40 +60,97 @@
   animation: spin 2s linear infinite;
   transform-origin: center;
 }
+/* Animasi fade-in */
+.fade-in {
+    animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 </style>
 
+<!-- ======= EMAIL BELUM TERVALIDASI – OTP ======= -->
+  <div id="unverifiedEmailNotice"
+      class="hidden w-full sm:ml-64 min-h-screen flex items-center justify-center 
+              bg-gray-50 dark:bg-gray-800 px-4 transition-colors">
+
+    <div class="max-w-md w-full bg-white dark:bg-gray-900 shadow-md rounded-xl p-6">
+
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3">
+        Verifikasi Email
+      </h2>
+
+      <p class="text-gray-600 dark:text-gray-300 mb-4">
+        Masukkan kode OTP yang dikirim ke email Anda.
+      </p>
+
+      <!-- OTP Input -->
+      <input id="otpInput" 
+            type="text" 
+            maxlength="6"
+            class="w-full p-3 border rounded-lg dark:bg-gray-800 dark:border-gray-700 text-center text-lg font-mono"
+            placeholder="Masukkan kode OTP">
+
+      <!-- Error Message -->
+      <p id="otpMessage" class="text-red-500 text-sm mt-2 hidden"></p>
+
+
+      <!-- Verify Button -->
+      <button id="otpSubmitBtn"
+              class="w-full mt-4 bg-green-600 hover:bg-green-700 text-white p-3 rounded-lg font-medium">
+        Verifikasi OTP
+      </button>
+
+      <!-- Timer -->
+      <p id="otpTimer"
+        class="text-center text-gray-500 dark:text-gray-400 text-sm mt-3 hidden"></p>
+
+      <!-- Resend Button -->
+      <button id="resendOtpBtn"
+              class="w-full mt-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 
+                    p-3 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled>
+        Kirim Ulang OTP
+      </button>
+
+    </div>
+  </div>
 
 
 <!-- ======= MEMBER DASHBOARD ======= -->
-<div id="dashboardContent"  class="hidden w-full sm:ml-64 overflow-auto bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors">
+<div id="dashboardContent"  class="hidden w-full sm:ml-64 overflow-auto bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors">
 <div class="mt-24 px-4 sm:px-6 md:px-8 ">
-<div id="unverifiedEmailNotice" 
+  <!-- ======= Reminder Reward ======= -->
+<div id="rewardReminder" 
      class="hidden relative shadow-md flex flex-col justify-center 
-             bg-white dark:bg-gray-950 
-             text-gray-700 dark:text-gray-100 
-             overflow-hidden rounded-xl 
-             border border-gray-300 dark:border-gray-700 
-             p-4 sm:p-6 transition-colors ">
-  <div class="flex justify-center ">
-    <ion-icon name="mail-unread-outline" class="text-4xl text-yellow-500"></ion-icon>
-  </div>
-  <h2 class="text-xl font-bold mb-2">Email Belum Terverifikasi</h2>
-  <p class="text-sm mb-3">
-    Silakan periksa kotak masuk email kamu untuk melakukan verifikasi akun sebelum mengakses dashboard member.
-  </p>
-  <button id="resendVerifyBtn"
-     class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-medium 
-            px-5 py-2 rounded-lg transition-all shadow">
-    Kirim Ulang Email Verifikasi
-  </button>
+            bg-green-100 dark:bg-gray-800 
+            text-gray-700 dark:text-gray-100 
+            overflow-hidden rounded-xl 
+            border border-gray-300 dark:border-gray-700 
+            p-4 sm:p-6 transition-colors">
+
+
+
+  <!-- Title -->
+  <h3 class="text-xl font-bold mb-1">Penukaran Poin </h3>
+
+  <!-- Message -->
+  <p id="rewardMessage" class="text-base sm:text-lg font-medium mb-1"></p>
+
+  <!-- Countdown -->
+  <p id="rewardCountdown" class="font-semibold text-green-700 dark:text-green-300 mb-3"></p>
 </div>
+
 </div>
   <div class="mt-6 px-4 sm:px-6 md:px-8">
   <div class="grid sm:grid-cols-1 gap-4">
     <!-- ===== Greeting Card ===== -->
     <div
       class="relative shadow-md flex flex-col justify-center 
-             bg-white dark:bg-gray-950 
+             bg-gray-50 dark:bg-gray-800 
              text-gray-700 dark:text-gray-100 
              overflow-hidden rounded-xl 
              border border-gray-300 dark:border-gray-700 
@@ -137,7 +194,7 @@
       <!-- Total Belanja -->
       <div
         class="relative shadow-md flex flex-row items-center justify-between 
-               bg-white dark:bg-gray-950 
+               bg-gray-50 dark:bg-gray-800
                text-gray-900 dark:text-gray-100 
                border border-gray-300 dark:!border-gray-700 
                p-6 rounded-xl transition-colors">
@@ -151,7 +208,7 @@
       <!-- Total Poin -->
       <div
         class="relative shadow-md flex flex-row items-center justify-between 
-               bg-white dark:bg-gray-950 
+               bg-gray-50 dark:bg-gray-800
                text-gray-900 dark:text-gray-100 
                border border-gray-300 dark:!border-gray-700 
                p-6 rounded-xl transition-colors">
@@ -165,7 +222,7 @@
       <!-- Total Kupon -->
       <div
         class="relative shadow-md flex flex-row items-center justify-between 
-               bg-white dark:bg-gray-950 
+               bg-gray-50 dark:bg-gray-800
                text-gray-900 dark:text-gray-100 
                border border-gray-300 dark:!border-gray-700 
                p-6 rounded-xl transition-colors">
@@ -189,22 +246,22 @@
   <!-- Container tampilan -->
   <div id="displayArea"
        class="flex justify-center items-center w-full sm:w-[390px] min-h-[300px]
-              bg-white dark:bg-gray-900 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 p-4 transition">
+              bg-gray-50 dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 p-4 transition">
     <p class="text-gray-400">Pilih tampilan di bawah...</p>
   </div>
 
   <!-- Tombol pilihan -->
   <div class="flex justify-center mt-6 space-x-3 flex-wrap">
     <button id="btnBarcode"
-            class="btn-choice bg-orange-500 hover:bg-orange-600 text-white">
+            class="btn-choice bg-orange-500 hover:bg-orange-600 text-gray-50">
       <i class="fa-solid fa-barcode mr-2"></i> Barcode
     </button>
     <button id="btnQR"
-            class="btn-choice bg-green-500 hover:bg-green-600 text-white">
+            class="btn-choice bg-green-500 hover:bg-green-600 text-gray-50">
       <i class="fa-solid fa-qrcode mr-2"></i> QR Code
     </button>
     <button id="btnKartu"
-            class="btn-choice bg-blue-500 hover:bg-blue-600 text-white">
+            class="btn-choice bg-blue-500 hover:bg-blue-600 text-gray-50">
       <i class="fa-solid fa-id-card mr-2"></i> Kartu PAS
     </button>
   </div>
@@ -214,7 +271,7 @@
 <div id="popupModal"
      class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
   <div id="popupContent"
-       class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden transition transform scale-100">
+       class="relative bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden transition transform scale-100">
   </div>
 </div>
 
@@ -228,7 +285,7 @@
 
  <!-- ===== Grafik Belanja ===== -->
 <div
-  class="bg-white dark:bg-gray-950 rounded-xl shadow-md
+  class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-md
          border border-gray-300 dark:border-gray-700
          p-4 sm:p-6 transition-colors
          w-full h-[320px] sm:h-[350px]"
@@ -244,22 +301,22 @@
     </div>
   </div>
 
-  <div
+  <canvas
     id="chart"
     class="w-full h-[250px] sm:h-[300px] overflow-x-auto overflow-y-hidden"
   >
     <div id="chart-inner" class="min-w-[320px] sm:min-w-full"></div>
-  </div>
+</canvas>
 </div>
 </div>
 
 <!-- ===== TABEL TRANSAKSI (DESKTOP / TABLET) ===== -->
 <div
   class="p-4 sm:px-6 md:px-8 my-6 relative flex flex-col 
-         rounded-xl bg-white dark:bg-gray-950 
+         rounded-xl bg-gray-50 dark:bg-gray-800 
          shadow-md border border-gray-300 dark:border-gray-700 
          transition-colors
-         w-full max-w-[1200px] mx-auto
+         w-full max-w-[950px] mx-auto
          hidden md:block"> <!-- ⬅️ ubah sm:block jadi md:block -->
 
   <h2 class="text-center text-lg font-semibold text-gray-800 dark:text-gray-100 
@@ -300,8 +357,8 @@
   {{-- ================= TRANSAKSI MOBILE ================= --}}
 <div
   class="p-4 sm:px-6 md:px-8 my-4 block md:hidden 
-         bg-white dark:bg-gray-950 
-         rounded-xl shadow-md border border-gray-300 dark:!border-gray-700 transition-colors w-full">
+         bg-gray-50 dark:bg-gray-800
+         rounded-xl shadow-md border border-gray-300 dark:border-gray-700 transition-colors w-full">
     <h2 class="text-center text-lg font-semibold text-gray-800 dark:text-gray-100 border-b border-gray-300 dark:!border-gray-700 pb-3">
       Riwayat Transaksi
     </h2>
@@ -317,461 +374,750 @@
 </div>
 
 {{-- ================= MODAL LIHAT SEMUA TRANSAKSI ================= --}}
-<div id="modalAllTransactions"
-     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-all"
-     onclick="if(event.target.id==='modalAllTransactions'){this.classList.add('hidden');}">
-  <div class="relative bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 rounded-xl shadow-xl w-11/12 md:w-3/4 lg:w-1/2 max-h-[80vh] overflow-y-auto">
-    <div class="flex justify-between items-center border-b border-gray-300 dark:border-gray-700 p-4">
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Semua Transaksi</h3>
-      <button id="closeModalBtn" class="text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 text-xl font-bold">&times;</button>
+<div id="modalAllTransactions" 
+     class="hidden fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-2">
+  <div class="bg-gray-50 dark:bg-gray-900 rounded-xl w-full sm:w-[90%] max-w-2xl flex flex-col max-h-screen">
+    
+    <!-- HEADER -->
+    <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+      <h2 class="text-lg font-semibold">Semua Transaksi</h2>
+      <button id="closeModalBtn" class="text-gray-600 dark:text-gray-300 hover:text-red-500 text-xl font-bold">✖</button>
     </div>
-    <div id="allTransactionsList" class="p-4 space-y-3 text-gray-700 dark:text-gray-100">
-      <p class="text-center text-gray-500 dark:text-gray-400">Memuat data...</p>
+
+    <!-- CONTENT SCROLLABLE -->
+    <div id="allTransactionsList" class="p-4 overflow-y-auto flex-1 space-y-2 max-h-[70vh] sm:max-h-[60vh]">
+      <!-- transaksi akan dirender di sini -->
+    </div>
+
+    <!-- FOOTER PAGINATION -->
+    <div id="paginationArea" class="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-center gap-2 flex-wrap">
+      <!-- tombol pagination akan dirender di sini -->
     </div>
   </div>
 </div>
 
 
+</div>
+<style>
+  #cssLoader {
+    animation: hideLoader 1s ease forwards;
+    animation-delay: 0.7s; /* lama loading di layar */
+  }
+
+  @keyframes hideLoader {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+</style>
+
+<!-- CSS ONLY LOADING OVERLAY -->
+<div 
+  id="cssLoader"
+  class="fixed inset-0 bg-black bg-opacity-50 
+         flex items-center justify-center 
+         z-[9999] opacity-100">
+
+  <div class="w-14 h-14 border-4 border-gray-300 border-t-green-500 
+              rounded-full animate-spin"></div>
+</div>
+<!-- POPUP OTP BERHASIL -->
+<div id="otpSuccessPopup"
+     class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[9999]">
+  <div class="bg-white dark:bg-gray-900 rounded-xl shadow-2xl px-8 py-6 text-center animate-popup">
+    <ion-icon name="checkmark-circle-outline" class="text-5xl text-green-500 mb-3"></ion-icon>
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Verifikasi Berhasil!</h3>
+    <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">Email kamu sudah terverifikasi 🎉</p>
+  </div>
+</div>
+
+<style>
+@keyframes popupAnim {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-popup {
+  animation: popupAnim 0.3s ease-out;
+}
+</style>
+
+
+
 <!-- ===== DEPENDENCIES ===== -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
 <!-- ===== MAIN SCRIPT ===== -->
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
-  const token = localStorage.getItem("jwt_token_user");
-  const api = {
-    dashboard: "{{ api_url('/api/auth/dashboard') }}",
-    barcode: "{{ api_url('/api/auth/barcode') }}",
-    qr: "{{ api_url('/api/auth/qr') }}",
-    resend: "{{ api_url('/api/email/resend') }}",
-  };
-  const authHeaders = { headers: { Authorization: `Bearer ${token}` } };
-
-  const el = {
-    displayArea: document.getElementById("displayArea"),
-    popupModal: document.getElementById("popupModal"),
-    popupContent: document.getElementById("popupContent"),
-    btnBarcode: document.getElementById("btnBarcode"),
-    btnQR: document.getElementById("btnQR"),
-    btnKartu: document.getElementById("btnKartu"),
-    greeting: document.getElementById("greeting"),
-    dashboardContent: document.getElementById("dashboardContent"),
-    noMemberNotice: document.getElementById("noMemberNotice"),
-    pendingNotice: document.getElementById("pendingMemberNotice"),
-    unverifiedNotice: document.getElementById("unverifiedEmailNotice"),
-  };
-
-  el.btnBarcode?.addEventListener("click", loadBarcode);
-  el.btnQR?.addEventListener("click", loadQR);
-  el.btnKartu?.addEventListener("click", loadKartuPas);
-  el.popupModal?.addEventListener("click", (e) => {
-    if (e.target === el.popupModal) el.popupModal.classList.add("hidden");
-  });
-
-  const formatRupiah = (val) =>
-    new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      notation: "compact",
-      maximumFractionDigits: 1,
-    }).format(Number(val) || 0);
-
-  if (el.greeting) {
-    const hour = new Date().getHours();
-    el.greeting.textContent =
-      hour < 5
-        ? "Selamat Dini Hari 🌙"
-        : hour < 12
-        ? "Selamat Pagi ☀️"
-        : hour < 15
-        ? "Selamat Siang 🌤️"
-        : hour < 18
-        ? "Selamat Sore 🌇"
-        : "Selamat Malam 🌌";
-  }
-
-  async function loadBarcode() { 
-    el.displayArea.innerHTML = `<p class="text-gray-400">Memuat barcode...</p>`;
-    try {
-      const { data } = await axios.get(api.barcode, { ...authHeaders });
-      if (!data?.barcode) throw new Error();
-      const barcode = data.barcode;
-
-      el.displayArea.innerHTML = `<img src="${barcode}" class="max-w-[200px] mx-auto" alt="Barcode"/>`;
-      el.popupContent.innerHTML = `
-        <div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
-          <img src="${barcode}" alt="Barcode Besar" class="w-[350px] h-auto object-contain"/>
-        </div>`;
-      el.popupModal.classList.remove("hidden");
-    } catch {
-      el.displayArea.textContent = "Gagal memuat barcode";
-    }
-  }
-  async function loadQR() {
-    el.displayArea.innerHTML = `<p class="text-gray-400">Memuat QR...</p>`;
-    try {
-      const { data } = await axios.get(api.qr, { ...authHeaders, responseType: "text" });
-      if (!data) throw new Error();
-
-      el.displayArea.innerHTML = data;
-      el.popupContent.innerHTML = `
-        <div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg flex justify-center">
-          ${data}
-        </div>`;
-      el.popupModal.classList.remove("hidden");
-    } catch {
-      el.displayArea.textContent = "Gagal memuat QR";
-    }}
-  async function loadKartuPas() {  el.displayArea.innerHTML = `<p class="text-gray-400">Memuat Kartu PAS...</p>`;
-    try {
-      const [memberRes, barcodeRes] = await Promise.all([
-        axios.get(api.dashboard, authHeaders),
-        axios.get(api.barcode, authHeaders),
-      ]);
-
-      const member = memberRes.data?.member;
-      const barcode = barcodeRes.data?.barcode;
-      if (!member || !barcode) throw new Error();
-
-      const firstName = member.name?.split(" ")[0] || "";
-
-      const cardSmall = `
-        <div class="relative w-full max-w-[340px] aspect-[5/3] bg-cover bg-center rounded-xl shadow-md overflow-hidden mx-auto"
-             style="background-image: url('/images/kartu_pas_template.png');">
-          <div class="absolute bottom-[36px] sm:bottom-[44px] left-[72%] sm:left-[76%] transform -translate-x-1/2 
-                      text-[5vw] sm:text-[2vw] md:text-lg font-bold text-green-900 drop-shadow-md whitespace-nowrap">
-            ${firstName}
-          </div>
-          <div class="absolute bottom-[10px] sm:bottom-[11px] right-[13%] sm:right-[6%]
-                      w-[30%] h-[16%] sm:w-[35%] sm:h-[20%]
-                      bg-white/80 flex items-center justify-center rounded-md p-1">
-            <img src="${barcode}" class="w-full h-auto object-contain"/>
-          </div>
-        </div>`;
-
-      const cardLarge = `
-        <div class="relative w-[90vw] max-w-[650px] aspect-[5/3] bg-cover bg-center rounded-xl overflow-hidden mx-auto"
-             style="background-image: url('/images/kartu_pas_template.png');">
-          <div class="absolute sm:bottom-[25%] sm:left-[76%] bottom-[65px] left-[72%] transform -translate-x-1/2 
-                      text-xl sm:text-2xl md:text-3xl font-bold text-green-900 drop-shadow-md whitespace-nowrap">
-            ${firstName}
-          </div>
-          <div class="absolute sm:bottom-[6%] sm:right-[6%] bottom-[19px] right-[13%] sm:w-[35%] sm:h-[20%] w-[30%] h-[16%] 
-                      bg-white/80 flex items-center justify-center rounded-md p-2">
-            <img src="${barcode}" class="w-full h-auto object-contain"/>
-          </div>
-        </div>`;
-
-      el.displayArea.innerHTML = cardSmall;
-      el.popupContent.innerHTML = cardLarge;
-      el.popupModal.classList.remove("hidden");
-    } catch {
-      el.displayArea.textContent = "Gagal memuat Kartu PAS";
-    }
-  }
-
-  // ===== FETCH DASHBOARD =====
-  try {
-    const { data } = await axios.get(api.dashboard, authHeaders);
-    const d = data || {};
-    const user = d.user || {};
-    const member = d.member || null;
-    const trx = Array.isArray(d.transactions) ? d.transactions : [];
-
-    [el.dashboardContent, el.noMemberNotice, el.pendingNotice].forEach((x) =>
-      x?.classList.add("hidden")
-    );
-
-    if (!member || !member.status || member.status === "Belum menjadi member") {
-      el.noMemberNotice?.classList.remove("hidden");
-      return;
+    // ===== INIT / CONFIG =====
+    const token = localStorage.getItem("jwt_token_user");
+    if (!token) {
+        // kalau tidak ada token, langsung ke login
+        window.location.href = "/login";
+        return;
     }
 
-    // ===== FITUR KUNCI OTOMATIS =====
-    const lockedSections = [
-      "#btnBarcode",
-      "#btnQR",
-      "#btnKartu",
-  
-    ];
+    // Store user email globally for OTP operations
+    let userEmail = '';
 
-    function lockAllFeatures() {
-      lockedSections.forEach((sel) => {
-        const elx = document.querySelector(sel);
-        if (!elx) return;
-        elx.classList.add("opacity-40", "pointer-events-none", "select-none");
-        if (elx.tagName === "TABLE" || elx.tagName === "DIV") {
-          elx.innerHTML = `
-            <div class="p-4 text-center text-gray-500 border rounded-lg bg-gray-50 dark:bg-gray-800">
-              🔒 Fitur ini dikunci. Verifikasi email Anda untuk membuka akses.
-            </div>`;
+    const api = {
+        dashboard: "{{ api_url('/api/auth/dashboard') }}",
+        barcode:  "{{ api_url('/api/auth/barcode') }}",
+        qr:       "{{ api_url('/api/auth/qr') }}",
+        semua:    "{{ api_url('/api/auth/semua') }}",
+        verifyOtp:"{{ api_url('/api/email/verify-otp') }}",
+        resendOtp:"{{ api_url('/api/email/resend-otp') }}"
+    };
+
+    const authHeaders = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
+    // Elements (safely grab them once)
+    const el = {
+        displayArea: document.getElementById("displayArea"),
+        popupModal: document.getElementById("popupModal"),
+        popupContent: document.getElementById("popupContent"),
+        btnBarcode: document.getElementById("btnBarcode"),
+        btnQR: document.getElementById("btnQR"),
+        btnKartu: document.getElementById("btnKartu"),
+        greeting: document.getElementById("greeting"),
+        dashboardContent: document.getElementById("dashboardContent"),
+        noMemberNotice: document.getElementById("noMemberNotice"),
+        pendingNotice: document.getElementById("pendingMemberNotice"),
+        unverifiedNotice: document.getElementById("unverifiedEmailNotice"),
+        rewardReminder: document.getElementById("rewardReminder"),
+        rewardMessage: document.getElementById("rewardMessage"),
+        rewardCountdown: document.getElementById("rewardCountdown")
+    };
+
+    // Cache popup markup supaya tidak fetch ulang
+    const popupCache = { qr: null, barcode: null, kartu: null };
+
+    // Global trx array (supaya bisa diakses di modal/btn lain)
+    let trx = [];
+
+    // interval id untuk reward countdown supaya tidak duplikat
+    let rewardIntervalId = null;
+
+    // ===== EVENT BINDING (safely) =====
+    if (el.btnBarcode) el.btnBarcode.addEventListener("click", loadBarcode);
+    if (el.btnQR) el.btnQR.addEventListener("click", loadQR);
+    if (el.btnKartu) el.btnKartu.addEventListener("click", loadKartuPas);
+    if (el.popupModal) {
+        el.popupModal.addEventListener("click", (e) => {
+            if (e.target === el.popupModal) el.popupModal.classList.add("hidden");
+        });
+    }
+
+    // ===== HELPERS =====
+    const formatRupiah = (val) =>
+        new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", notation: "compact", maximumFractionDigits: 1 }).format(Number(val) || 0);
+
+    const formatNumber = (val) =>
+        new Intl.NumberFormat("id-ID", { maximumFractionDigits: 0 }).format(Number(val) || 0);
+
+    const safeSetText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    };
+
+    // parsing tanggal: support dd-mm-yyyy and ISO strings
+    function parseAnyDate(str) {
+        if (!str) return null;
+        // if already Date object
+        if (str instanceof Date) return str;
+        // dd-mm-yyyy pattern
+        const dmY = /^\s*(\d{1,2})-(\d{1,2})-(\d{4})\s*$/;
+        const m = String(str).match(dmY);
+        if (m) {
+            const d = +m[1], mo = +m[2] - 1, y = +m[3];
+            return new Date(y, mo, d);
         }
-      });
+        // attempt Date constructor for ISO or other formats
+        const d = new Date(str);
+        return isNaN(d) ? null : d;
     }
 
-    function unlockAllFeatures() {
-      lockedSections.forEach((sel) => {
-        const elx = document.querySelector(sel);
-        if (!elx) return;
-        elx.classList.remove("opacity-40", "pointer-events-none", "select-none");
-      });
+    // ===== GREETING & TANGGAL =====
+    if (el.greeting) {
+        const hour = new Date().getHours();
+        el.greeting.textContent = hour < 5 ? "Selamat Dini Hari 🌙" :
+                                  hour < 12 ? "Selamat Pagi ☀️" :
+                                  hour < 15 ? "Selamat Siang 🌤️" :
+                                  hour < 18 ? "Selamat Sore 🌇" :
+                                  "Selamat Malam 🌌";
     }
 
-    // Cek status verifikasi email
-    if (!user.email_verified_at) {
-      el.unverifiedNotice?.classList.remove("hidden");
-      lockAllFeatures();
-    } else {
-      el.unverifiedNotice?.classList.add("hidden");
-      unlockAllFeatures();
+    const updateTanggal = () => {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const elTgl = document.getElementById("tanggalSekarang");
+        if (elTgl) elTgl.textContent = now.toLocaleDateString('id-ID', options);
+    };
+    updateTanggal();
+
+    // ======================================================================
+    // REMINDER PENUKARAN POIN (LENGKAP) — perbaikan interval dan visibility
+    // ======================================================================
+    function updateRewardReminder(poinUser = 0) {
+        const reminder = el.rewardReminder;
+        const message = el.rewardMessage;
+        const countdown = el.rewardCountdown;
+
+        if (!reminder || !message || !countdown) return;
+
+        // Masa penukaran: 1 Desember – 31 Desember (tahun berjalan)
+        const now = new Date();
+        const startDate = new Date(now.getFullYear(), 11 - 1, 1); // November? WAIT -> months 0-indexed: 10 = November; original wanted Dec.
+        // NOTE: original code used new Date(now.getFullYear(), 10, 1) meaning November 1 (!) 
+        // kalau maksudnya 1 Desember, gunakan month = 11
+        // Supaya sesuai komentar "1 Desember – 31 Desember", set month=11
+        const correctStart = new Date(now.getFullYear(), 11, 1); // 1 Desember
+        const correctEnd = new Date(now.getFullYear(), 11, 31, 23, 59, 59); // 31 Desember
+
+        // gunakan tanggal yang benar
+        const s = correctStart;
+        const e = correctEnd;
+
+        // Sembunyikan kalau poin kurang dari 50
+        if ((Number(poinUser) || 0) < 50) {
+            reminder.classList.add("hidden");
+            // clear interval jika ada
+            if (rewardIntervalId) { clearInterval(rewardIntervalId); rewardIntervalId = null; }
+            return;
+        }
+
+        // Jika belum mencapai 1 Desember atau sudah lewat 31 Desember -> hide
+        if (now < s || now > e) {
+            reminder.classList.add("hidden");
+            if (rewardIntervalId) { clearInterval(rewardIntervalId); rewardIntervalId = null; }
+            return;
+        }
+
+        // tampilkan reminder
+        reminder.classList.remove("hidden");
+        reminder.classList.add("fade-in");
+        message.textContent = `Segera tukarkan sebelum periode berakhir!`;
+
+        // setup countdown (hanya satu interval aktif)
+        if (rewardIntervalId) clearInterval(rewardIntervalId);
+        function updateCountdown() {
+            const diff = e - new Date();
+            if (diff <= 0) {
+                countdown.textContent = "Periode telah berakhir";
+                clearInterval(rewardIntervalId);
+                rewardIntervalId = null;
+                return;
+            }
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            // tampilkan cukup hari (seperti sebelumnya)
+            countdown.textContent = `Sisa waktu: ${days} hari`;
+        }
+        updateCountdown();
+        rewardIntervalId = setInterval(updateCountdown, 1000);
     }
-    // ===== END FITUR KUNCI OTOMATIS =====
 
-    if (member.status === "Pending") {
-      el.pendingNotice?.classList.remove("hidden");
-      document.getElementById("pendingStatus").textContent = member.status;
-      document.getElementById("pendingName").textContent = member.name || "-";
-      document.getElementById("pendingEmail").textContent = member.email || "-";
-      return;
+    function showOtpSuccessPopup() {
+        const popup = document.getElementById("otpSuccessPopup");
+        if (!popup) return;
+        popup.classList.remove("hidden");
+        setTimeout(() => popup.classList.add("hidden"), 2000);
     }
 
-    if (member.status === "Aktif")
-      el.dashboardContent?.classList.remove("hidden");
-
-    const currentYear = new Date().getFullYear();
-    const trxTahunBerjalan = trx.filter((t) => {
-      let tanggal = t.created_at || t.date;
-      if (!tanggal) return false;
-      if (/^\d{2}-\d{2}-\d{4}$/.test(tanggal)) {
-        const [day, month, year] = tanggal.split("-");
-        tanggal = `${year}-${month}-${day}`;
-      }
-      const year = new Date(tanggal).getFullYear();
-      return year === currentYear;
-    });
-
-    const totalPoin = trxTahunBerjalan.reduce(
-      (s, t) => s + (parseFloat(t.point) || 0),
-      0
-    );
-    const totalKupon = trxTahunBerjalan.reduce(
-      (s, t) => s + (parseFloat(t.coupon) || 0),
-      0
-    );
-
-    document.getElementById("userName").textContent = member.name
-      ? " " + member.name + "!"
-      : "";
-    document.getElementById("noMember").textContent = member.no_member
-      ? "Dengan Nomor Member: " + member.no_member
-      : "Belum menjadi member";
-    document.getElementById("totalBelanja").textContent = formatRupiah(
-      trxTahunBerjalan.reduce((s, t) => s + (parseFloat(t.amount) || 0), 0)
-    );
-    document.getElementById("totalPoin").textContent = totalPoin;
-    document.getElementById("totalKupon").textContent = totalKupon;
-
-    renderTransactionsDesktop(trx);
-    renderTransactionsMobile(trx);
-    renderAllTransactions(trx);
-    renderChart(trx);
-  } catch (err) {
-    console.error("Error dashboard:", err);
-    if (err.response?.status === 401) {
-      localStorage.removeItem("jwt_token_user");
-      window.location.href = "/login";
+    // ======================================================================
+    // POPUP UTIL
+    // ======================================================================
+    function showPopup(html) {
+        if (!el.popupContent || !el.popupModal) return;
+        el.popupContent.innerHTML = html;
+        el.popupModal.classList.remove("hidden");
     }
-  }
+    function resetPopup() {
+        if (el.popupModal) el.popupModal.classList.add("hidden");
+        // cache tetap disimpan supaya reusable
+    }
 
-  // ...fungsi renderTransactionsDesktop/Mobile/All/chart/resendModal tetap sama...
+    // ======================================================================
+    // BARCODE
+    // ======================================================================
+    async function loadBarcode() {
+        if (popupCache.barcode) return showPopup(popupCache.barcode);
+        if (el.displayArea) el.displayArea.innerHTML = `<p class="text-gray-400">Memuat barcode...</p>`;
+        try {
+            const { data } = await axios.get(api.barcode, authHeaders);
+            if (!data?.barcode) throw new Error("No barcode");
+            const barcode = data.barcode;
+            if (el.displayArea) el.displayArea.innerHTML = `<img src="${barcode}" class="max-w-[200px] mx-auto" alt="Barcode"/>`;
+            const popupHtml = `<div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+                <img src="${barcode}" class="w-[350px] h-auto object-contain" alt="Barcode"/>
+            </div>`;
+            popupCache.barcode = popupHtml;
+            showPopup(popupHtml);
+        } catch (err) {
+            if (el.displayArea) el.displayArea.textContent = "Gagal memuat barcode";
+            console.error("loadBarcode:", err);
+        }
+    }
 
-  
+    // ======================================================================
+    // QR CODE
+    // ======================================================================
+    async function loadQR() {
+        if (popupCache.qr) return showPopup(popupCache.qr);
+        if (el.displayArea) el.displayArea.innerHTML = `<p class="text-gray-400">Memuat QR...</p>`;
+        try {
+            // expect HTML/SVG string
+            const res = await axios.get(api.qr, { ...authHeaders, responseType: "text" });
+            const data = res.data;
+            if (!data) throw new Error("No QR");
+            if (el.displayArea) el.displayArea.innerHTML = data;
+            const popupHtml = `<div class="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg flex justify-center">${data}</div>`;
+            popupCache.qr = popupHtml;
+            showPopup(popupHtml);
+        } catch (err) {
+            if (el.displayArea) el.displayArea.textContent = "Gagal memuat QR";
+            console.error("loadQR:", err);
+        }
+    }
 
-  // ====== RENDER TRANSAKSI ======
-  function renderTransactionsDesktop(trx) {
-    const tbody = document.getElementById("transactionBody");
-    if (!tbody) return;
-    tbody.innerHTML = trx.length
-      ? trx
-          .slice(0, 3)
-          .map(
-            (t, i) => `
-        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-          <td class="px-6 py-3">${i + 1}</td>
-          <td class="px-6 py-3">${t.id}</td>
-          <td class="px-6 py-3">${t.date}</td>
-          <td class="px-6 py-3">${formatRupiah(t.amount)}</td>
-          <td class="px-6 py-3">${t.point}</td>
-          <td class="px-6 py-3">${t.coupon}</td>
-        </tr>`
-          )
-          .join("")
-      : `<tr><td colspan="6" class="text-center py-4 text-gray-500">Belum ada transaksi</td></tr>`;
-  }
+    // ======================================================================
+    // KARTU PAS
+    // ======================================================================
+    async function loadKartuPas() {
+        if (popupCache.kartu) return showPopup(popupCache.kartu);
+        if (el.displayArea) el.displayArea.innerHTML = `<p class="text-gray-400">Memuat Kartu PAS...</p>`;
+        try {
+            const [memberRes, barcodeRes] = await Promise.all([
+                axios.get(api.dashboard, authHeaders),
+                axios.get(api.barcode, authHeaders)
+            ]);
+            const member = memberRes.data?.member;
+            const barcode = barcodeRes.data?.barcode;
+            if (!member || !barcode) throw new Error("Missing data");
+            const firstName = (member.name || "").split(" ")[0] || "";
 
-  function renderTransactionsMobile(trx) {
-    const container = document.getElementById("transactionListMobile");
-    if (!container) return;
-    container.innerHTML = trx.length
-      ? trx
-          .slice(0, 3)
-          .map(
-            (t, i) => `
-        <div class="p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm">
-          <p><b>No:</b> ${i + 1}</p>
-          <p><b>No. Transaksi:</b> ${t.id}</p>
-          <p><b>Tanggal:</b> ${t.date}</p>
-          <p><b>Total:</b> ${formatRupiah(t.amount)}</p>
-          <p><b>Poin:</b> ${t.point}</p>
-          <p><b>Kupon:</b> ${t.coupon}</p>
-        </div>`
-          )
-          .join("")
-      : `<p class="text-center text-gray-500">Belum ada transaksi</p>`;
-  }
+            const cardSmall = `
+                <div class="relative w-full max-w-[340px] aspect-[5/3] bg-cover bg-center rounded-xl shadow-md overflow-hidden mx-auto"
+                     style="background-image: url('/images/kartu_pas_template.png');">
+                    <div class="absolute bottom-[32px] left-[72%] sm:bottom-[40px] sm:left-[72%] transform -translate-x-1/2 text-[5vw] sm:text-[2vw] md:text-lg font-bold text-green-900 drop-shadow-md whitespace-nowrap">
+                        ${firstName}
+                    </div>
+                    <div class="absolute bottom-[10px] right-[13%] sm:bottom-[12px] sm:right-[13%] w-[30%] h-[16%] bg-white/80 flex items-center justify-center rounded-md p-1">
+                        <img src="${barcode}" class="w-full h-auto object-contain" alt="Barcode"/>
+                    </div>
+                </div>
+            `;
+            const cardLarge = `
+                <div class="relative w-[90vw] max-w-[650px] aspect-[5/3] bg-cover bg-center rounded-xl overflow-hidden mx-auto"
+                     style="background-image: url('/images/kartu_pas_template.png');">
+                    <div class="absolute bottom-[47px] left-[72%] sm:bottom-[90px] sm:left-[72%] transform -translate-x-1/2 text-xl sm:text-2xl font-bold text-green-900 drop-shadow-md whitespace-nowrap">
+                        ${firstName}
+                    </div>
+                    <div class="absolute bottom-[17px] right-[13%] sm:bottom-[22px] sm:right-[13%] w-[30%] h-[16%] bg-white/80 flex items-center justify-center rounded-md p-2">
+                        <img src="${barcode}" class="w-full h-auto object-contain" alt="Barcode"/>
+                    </div>
+                </div>
+            `;
+            if (el.displayArea) el.displayArea.innerHTML = cardSmall;
+            popupCache.kartu = cardLarge;
+            showPopup(cardLarge);
+        } catch (err) {
+            if (el.displayArea) el.displayArea.textContent = "Gagal memuat Kartu PAS";
+            console.error("loadKartuPas:", err);
+        }
+    }
 
-  function renderAllTransactions(trx) {
-    const container = document.getElementById("allTransactionsList");
-    if (!container) return;
-    container.innerHTML = trx.length
-      ? trx
-          .map(
-            (t, i) => `
-        <div class="p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm">
-          <p><b>No:</b> ${i + 1}</p>
-          <p><b>No. Transaksi:</b> ${t.id}</p>
-          <p><b>Tanggal:</b> ${t.date}</p>
-          <p><b>Total:</b> ${formatRupiah(t.amount)}</p>
-          <p><b>Poin:</b> ${t.point}</p>
-          <p><b>Kupon:</b> ${t.coupon}</p>
-        </div>`
-          )
-          .join("")
-      : `<p class="text-center text-gray-500">Tidak ada transaksi</p>`;
-  }
+    // ======================================================================
+    // OTP FUNCTIONS
+    // ======================================================================
+    let otpCountdownInterval = null;
 
-  function renderChart(trx) {
-  if (!trx.length) return;
+    function startOtpCountdown(duration = 60) {
+        const resendBtn = document.getElementById("resendOtpBtn");
+        const otpTimer = document.getElementById("otpTimer");
+        if (!resendBtn || !otpTimer) return;
 
-  const year = new Date().getFullYear();
-  document.getElementById("tahunSekarang").textContent = year;
+        resendBtn.disabled = true;
+        otpTimer.classList.remove("hidden");
 
-  const parseDate = (str) => {
-    const [day, month, year] = str.split("-");
-    return new Date(`${year}-${month}-${day}`);
-  };
+        let timeLeft = duration;
+        otpTimer.textContent = `Kirim ulang dalam ${timeLeft}s`;
 
-  const filtered = trx.filter((t) => {
-    const d = parseDate(t.date);
-    return d.getFullYear() === year;
-  });
+        if (otpCountdownInterval) clearInterval(otpCountdownInterval);
+        otpCountdownInterval = setInterval(() => {
+            timeLeft--;
+            otpTimer.textContent = `Kirim ulang dalam ${timeLeft}s`;
+            if (timeLeft <= 0) {
+                clearInterval(otpCountdownInterval);
+                otpCountdownInterval = null;
+                otpTimer.classList.add("hidden");
+                resendBtn.disabled = false;
+            }
+        }, 1000);
+    }
 
-  if (!filtered.length) return;
+    async function resendOtp() {
+        const resendBtn = document.getElementById("resendOtpBtn");
+        const otpMessage = document.getElementById("otpMessage");
+        if (!resendBtn || !otpMessage) return;
 
-  const monthMap = {};
-  const monthNames = [
-    "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-    "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
-  ];
+        if (!userEmail) {
+            otpMessage.textContent = "Email tidak ditemukan!";
+            otpMessage.classList.remove("hidden");
+            return;
+        }
 
-  filtered.forEach((t) => {
-    const d = parseDate(t.date);
-    const month = monthNames[d.getMonth()];
-    if (!monthMap[month]) monthMap[month] = { amount: 0, point: 0 };
-    monthMap[month].amount += parseFloat(t.amount) || 0;
-    monthMap[month].point += parseFloat(t.point) || 0;
-  });
+        otpMessage.textContent = "Mengirim OTP...";
+        otpMessage.classList.remove("hidden");
 
-  const categories = Object.keys(monthMap);
-  const values = categories.map((m) => monthMap[m].amount);
-  const points = categories.map((m) => monthMap[m].point);
+        try {
+            const { data } = await axios.post(api.resendOtp, { email: userEmail }, authHeaders);
+            otpMessage.textContent = data.message || "OTP berhasil dikirim!";
+            startOtpCountdown(60);
+        } catch (err) {
+            otpMessage.textContent = err.response?.data?.message || "Gagal mengirim OTP!";
+            startOtpCountdown(60); // tetap start supaya tidak spam
+            console.error("resendOtp:", err);
+        }
+    }
 
-  const options = {
-    chart: {
-      type: "bar",
-      height: 300,
-      toolbar: { show: false },
-      animations: { enabled: true },
-      fontFamily: "Inter, sans-serif",
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "55%",
-        borderRadius: 6,
-      },
-    },
-    dataLabels: { enabled: false },
-    fill: {
-      opacity: 0.9,
-      gradient: {
-        shade: "light",
-        type: "vertical",
-        opacityFrom: 0.9,
-        opacityTo: 0.5,
-        stops: [0, 90, 100],
-      },
-    },
-    stroke: { show: false },
-    colors: ["#4f46e5", "#10b981"],
-    series: [
-      { name: "Belanja (Rp)", data: values },
-      { name: "Poin", data: points },
-    ],
-    xaxis: {
-      categories,
-      labels: { rotate: -45 },
-      axisBorder: { show: false },
-      axisTicks: { show: false },
-    },
-    yaxis: {
-      labels: { formatter: (val) => formatRupiah(val) },
-    },
-    grid: {
-      borderColor: "#e5e7eb",
-      strokeDashArray: 4,
-      yaxis: { lines: { show: true } },
-    },
-    tooltip: {
-      shared: true,
-      intersect: false,
-      y: {
-        formatter: (val, { seriesIndex }) =>
-          seriesIndex === 0 ? formatRupiah(val) : val + " poin",
-      },
-    },
-    legend: {
-      position: "top",
-      labels: { colors: "#4b5563" },
-    },
-  };
+    // Pasang event listener kalau elemen ada (hindari double bind)
+    const resendBtnEl = document.getElementById("resendOtpBtn");
+    if (resendBtnEl) {
+        resendBtnEl.removeEventListener?.("click", resendOtp); // safe-remove if supported
+        resendBtnEl.addEventListener("click", resendOtp);
+    }
 
-  const chartContainer = document.querySelector("#chart");
-  if (chartContainer) {
-    chartContainer.innerHTML = "";
-    new ApexCharts(chartContainer, options).render();
-  }
-}
+    async function verifyOtp() {
+        const verifyBtn = document.getElementById("otpSubmitBtn");
+        const otpInput = document.getElementById("otpInput");
+        const otpMessage = document.getElementById("otpMessage");
+        if (!verifyBtn || !otpInput || !otpMessage) return;
 
+        const otp = otpInput.value.trim();
+        if (!otp) {
+            otpMessage.textContent = "Masukkan kode OTP!";
+            otpMessage.classList.remove("hidden", "fade-in");
+            otpMessage.classList.add("fade-in");
+            return;
+        }
+        if (!userEmail) {
+            otpMessage.textContent = "Email tidak ditemukan!";
+            otpMessage.classList.remove("hidden", "fade-in");
+            otpMessage.classList.add("fade-in");
+            return;
+        }
 
+        verifyBtn.disabled = true;
+        const originalText = verifyBtn.textContent;
+        verifyBtn.innerHTML = `<span class="animate-spin">⏳</span> Memverifikasi...`;
+        otpMessage.classList.add("hidden");
 
-  // ====== RESEND EMAIL VERIFIKASI ======
-  document.getElementById("resendVerifyBtn")?.addEventListener("click", async () => {
+        try {
+            const { data } = await axios.post(api.verifyOtp, { email: userEmail, otp }, authHeaders);
+            showOtpSuccessPopup();
+            otpMessage.textContent = data.message || "Email berhasil diverifikasi!";
+            otpMessage.classList.remove("hidden");
+            otpMessage.classList.add("fade-in");
+            // reload untuk sync state
+            setTimeout(() => window.location.reload(), 1200);
+        } catch (err) {
+            otpMessage.textContent = err.response?.data?.message || "OTP salah atau gagal diverifikasi!";
+            otpMessage.classList.remove("hidden");
+            otpMessage.classList.add("fade-in");
+            console.error("verifyOtp:", err);
+        } finally {
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = originalText;
+        }
+    }
+
+    const verifyBtnEl = document.getElementById("otpSubmitBtn");
+    if (verifyBtnEl) {
+        verifyBtnEl.removeEventListener?.("click", verifyOtp);
+        verifyBtnEl.addEventListener("click", verifyOtp);
+    }
+
+    // ======================================================================
+    // FETCH DASHBOARD + RENDERING
+    // ======================================================================
     try {
-      const res = await axios.post(api.resend, {}, authHeaders);
-      alert(res.data.message || "Email verifikasi telah dikirim ulang. Silakan cek inbox.");
-    } catch {
-      alert("Gagal mengirim ulang email verifikasi. Coba lagi nanti.");
-    }
-  });
+        const res = await axios.get(api.semua, authHeaders);
+        const d = res.data || {};
+        const user = d.user || {};
+        const member = d.member || null;
+        trx = Array.isArray(d.transactions) ? d.transactions : [];
 
-  // ====== MODAL SEMUA TRANSAKSI (tidak diubah) ======
-  const modalWrapper = document.getElementById("modalAllTransactions");
-  document.getElementById("lihatSemuaBtn")?.addEventListener("click", () => modalWrapper.classList.remove("hidden"));
-  document.getElementById("lihatSemuaBtnMobile")?.addEventListener("click", () => modalWrapper.classList.remove("hidden"));
-  document.getElementById("closeModalBtn")?.addEventListener("click", () => modalWrapper.classList.add("hidden"));
-});
+        // Store user email
+        userEmail = user.email || '';
+
+        // hide semua dulu
+        [el.dashboardContent, el.noMemberNotice, el.pendingNotice, el.unverifiedNotice]
+            .forEach(x => x?.classList.add("hidden"));
+
+        // cek verifikasi email
+        if (!user.email_verified_at) {
+            el.unverifiedNotice?.classList.remove("hidden");
+            const emailDisplay = document.getElementById("userEmailDisplay");
+            if (emailDisplay && userEmail) emailDisplay.textContent = userEmail;
+            // mulai countdown untuk resend
+            startOtpCountdown(60);
+            return; // berhenti sampai user verifikasi
+        }
+
+        // cek status member
+        if (!member || !member.status || member.status === "Belum menjadi member") {
+            el.noMemberNotice?.classList.remove("hidden");
+            return;
+        }
+        if (member.status === "Pending") {
+            el.pendingNotice?.classList.remove("hidden");
+            safeSetText("pendingStatus", member.status || "-");
+            safeSetText("pendingName", member.name || "-");
+            safeSetText("pendingEmail", member.email || "-");
+            return;
+        }
+        if (member.status === "Aktif") {
+            el.dashboardContent?.classList.remove("hidden");
+        }
+
+        // transaksi tahun berjalan (gunakan parseAnyDate)
+        const currentYear = new Date().getFullYear();
+        const trxTahunBerjalan = trx.filter(t => {
+            const tanggalStr = t.created_at || t.date || t.date_created;
+            const dObj = parseAnyDate(tanggalStr);
+            return dObj ? dObj.getFullYear() === currentYear : false;
+        });
+
+        const totalPoin = trxTahunBerjalan.reduce((s, t) => s + (parseFloat(t.point) || 0), 0);
+        const totalKupon = trxTahunBerjalan.reduce((s, t) => s + (parseFloat(t.coupon) || 0), 0);
+        const totalBelanja = trxTahunBerjalan.reduce((s, t) => s + (parseFloat(t.amount) || 0), 0);
+
+        // update reminder poin
+        updateRewardReminder(totalPoin);
+
+        // update UI text
+        safeSetText("userName", member.name ? " " + member.name + "!" : "");
+        safeSetText("noMember", member.no_member ? `Dengan Nomor Member: ${member.no_member}` : "Belum menjadi member");
+        safeSetText("totalBelanja", formatRupiah(totalBelanja));
+        safeSetText("totalPoin", formatNumber(totalPoin));
+        safeSetText("totalKupon", formatNumber(totalKupon));
+
+        // render
+        renderTransactionsDesktop(trx);
+        renderTransactionsMobile(trx);
+        renderChart(trx);
+        await renderAllTransactions(1, 10, trx);
+
+    } catch (err) {
+        console.error("Error dashboard:", err);
+        if (err.response?.status === 401) {
+            localStorage.removeItem("jwt_token_user");
+            window.location.href = "/login";
+        }
+    }
+
+    // ======================================================================
+    // RENDER TRANSAKSI (desktop/mobile/all)
+    // ======================================================================
+    function renderTransactionsDesktop(trxData = []) {
+        const tbody = document.getElementById("transactionBody");
+        if (!tbody) return;
+        const list = Array.isArray(trxData) ? trxData : [];
+        tbody.innerHTML = list.length
+            ? list.slice(0, 3).map((t, i) => {
+                const date = t.date || t.created_at || '-';
+                return `
+                    <tr class="text-gray-950 dark:text-gray-50">
+                        <td class="px-6 py-3">${i + 1}</td>
+                        <td class="px-6 py-3">${t.id || '-'}</td>
+                        <td class="px-6 py-3">${date}</td>
+                        <td class="px-6 py-3">${formatRupiah(t.amount)}</td>
+                        <td class="px-6 py-3">${formatNumber(t.point)}</td>
+                        <td class="px-6 py-3">${formatNumber(t.coupon)}</td>
+                    </tr>`;
+            }).join("")
+            : `<tr><td colspan="6" class="text-center py-4 text-gray-500">Belum ada transaksi</td></tr>`;
+    }
+
+    function renderTransactionsMobile(trxData = []) {
+        const container = document.getElementById("transactionListMobile");
+        if (!container) return;
+        const list = Array.isArray(trxData) ? trxData : [];
+        container.innerHTML = list.length
+            ? list.slice(0, 3).map((t, i) => {
+                const date = t.date || t.created_at || '-';
+                return `
+                    <div class="p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm">
+                        <p><b>No:</b> ${i + 1}</p>
+                        <p><b>No. Transaksi:</b> ${t.id || '-'}</p>
+                        <p><b>Tanggal:</b> ${date}</p>
+                        <p><b>Total:</b> ${formatRupiah(t.amount)}</p>
+                        <p><b>Poin:</b> ${formatNumber(t.point)}</p>
+                        <p><b>Kupon:</b> ${formatNumber(t.coupon)}</p>
+                    </div>`;
+            }).join("")
+            : `<p class="text-center text-gray-500">Belum ada transaksi</p>`;
+    }
+
+    async function renderAllTransactions(page = 1, perPage = 10, trxData = []) {
+        const container = document.getElementById("allTransactionsList");
+        if (!container) return;
+        const list = Array.isArray(trxData) ? trxData : [];
+        const totalItems = list.length;
+        const totalPages = Math.max(Math.ceil(totalItems / perPage), 1);
+        const startIndex = (page - 1) * perPage;
+        const endIndex = startIndex + perPage;
+        const pageItems = list.slice(startIndex, endIndex);
+
+        container.innerHTML = pageItems.length
+            ? pageItems.map((t, i) => {
+                const date = t.date || t.created_at || '-';
+                return `
+                    <div class="p-3 border text-gray-950 dark:text-gray-50 rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm">
+                        <p><b>No:</b> ${startIndex + i + 1}</p>
+                        <p><b>No. Transaksi:</b> ${t.id || '-'}</p>
+                        <p><b>Tanggal:</b> ${date}</p>
+                        <p><b>Total:</b> ${formatRupiah(t.amount)}</p>
+                        <p><b>Poin:</b> ${formatNumber(t.point)}</p>
+                        <p><b>Kupon:</b> ${formatNumber(t.coupon)}</p>
+                    </div>`;
+            }).join("")
+            : `<p class="text-center text-gray-500 dark:text-gray-400">Tidak ada transaksi</p>`;
+
+        renderPagination(totalPages, page, list, perPage);
+    }
+
+    function renderPagination(totalPages, currentPage, trxData, perPage) {
+        const paginationContainer = document.getElementById("paginationArea");
+        if (!paginationContainer) return;
+        paginationContainer.innerHTML = "";
+
+        const prevBtn = document.createElement("button");
+        prevBtn.textContent = "← Prev";
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.className = `px-3 py-1 border rounded ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`;
+        prevBtn.onclick = () => renderAllTransactions(currentPage - 1, perPage, trxData);
+        paginationContainer.appendChild(prevBtn);
+
+        for (let p = 1; p <= totalPages; p++) {
+            const btn = document.createElement("button");
+            btn.textContent = p;
+            btn.className = `px-3 py-1 border rounded ${p === currentPage ? "bg-green-500 text-white" : "bg-gray-100 dark:bg-gray-600 cursor-pointer"}`;
+            btn.onclick = () => renderAllTransactions(p, perPage, trxData);
+            paginationContainer.appendChild(btn);
+        }
+
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "Next →";
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.className = `px-3 py-1 border rounded ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`;
+        nextBtn.onclick = () => renderAllTransactions(currentPage + 1, perPage, trxData);
+        paginationContainer.appendChild(nextBtn);
+    }
+
+    // ======================================================================
+    // CHART (Chart.js)
+    // ======================================================================
+    function renderChart(trxData = []) {
+        if (!Array.isArray(trxData) || !trxData.length) return;
+        const year = new Date().getFullYear();
+        const elTahun = document.getElementById("tahunSekarang");
+        if (elTahun) elTahun.textContent = year;
+
+        // kumpulkan data per bulan
+        const monthNames = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+        const monthMap = {};
+        trxData.forEach(t => {
+            const d = parseAnyDate(t.date || t.created_at);
+            if (!d || d.getFullYear() !== year) return;
+            const mName = monthNames[d.getMonth()];
+            if (!monthMap[mName]) monthMap[mName] = { amount: 0, point: 0 };
+            monthMap[mName].amount += parseFloat(t.amount) || 0;
+            monthMap[mName].point += parseFloat(t.point) || 0;
+        });
+
+        const labels = monthNames.filter(m => monthMap[m]);
+        if (!labels.length) return;
+        const values = labels.map(m => monthMap[m].amount);
+        const points = labels.map(m => monthMap[m].point);
+
+        const ctxEl = document.getElementById("chart");
+        if (!ctxEl) return;
+        const ctx = ctxEl.getContext("2d");
+        if (window.chartInstance) window.chartInstance.destroy();
+
+        const isDark = document.documentElement.classList.contains("dark");
+
+        window.chartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: "Belanja (Rp)",
+                        data: values,
+                        backgroundColor: "rgba(79,70,229,0.7)",
+                        borderColor: "rgb(79,70,229)",
+                        borderWidth: 1,
+                        borderRadius: 6
+                    },
+                    {
+                        label: "Poin",
+                        data: points,
+                        type: "line",
+                        borderColor: "rgb(16,185,129)",
+                        backgroundColor: "rgba(16,185,129,0.4)",
+                        tension: 0.4,
+                        yAxisID: "y1"
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: { mode: "index", intersect: false },
+                scales: {
+                    x: { ticks: { color: isDark ? "#e5e7eb" : "#374151" }, grid: { display: false } },
+                    y: { ticks: { color: isDark ? "#e5e7eb" : "#374151", callback: (v) => formatRupiah(v) } },
+                    y1: { position: "right", grid: { drawOnChartArea: false }, ticks: { color: isDark ? "#10b981" : "#065f46" } }
+                }
+            }
+        });
+    }
+
+    // ======================================================================
+    // MODAL ALL TRANSACTIONS BTN
+    // ======================================================================
+    const lihatSemuaBtn = document.getElementById("lihatSemuaBtn");
+    if (lihatSemuaBtn) {
+        lihatSemuaBtn.addEventListener("click", async () => {
+            const modal = document.getElementById("modalAllTransactions");
+            if (modal) modal.classList.remove("hidden");
+            await renderAllTransactions(1, 10, trx);
+        });
+    }
+
+    const lihatSemuaBtnMobile = document.getElementById("lihatSemuaBtnMobile");
+    if (lihatSemuaBtnMobile) {
+        lihatSemuaBtnMobile.addEventListener("click", async () => {
+            const modal = document.getElementById("modalAllTransactions");
+            if (modal) modal.classList.remove("hidden");
+            await renderAllTransactions(1, 10, trx);
+        });
+    }
+
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener("click", () => {
+            const modal = document.getElementById("modalAllTransactions");
+            if (modal) modal.classList.add("hidden");
+        });
+    }
+
+}); // DOMContentLoaded
 </script>

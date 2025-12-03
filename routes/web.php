@@ -29,6 +29,7 @@ Route::view('/dashboardCS', 'auth.dashboardCS')->name('dashboardCS');
 Route::view('/table', 'auth.table')->name('table');
 Route::view('/table-akun', 'auth.table_akun')->name('table-akun');
 Route::view('/table-calon', 'auth.data_calon_member')->name('table-calon');
+Route::view('/table-belumverif', 'auth.table_belumverified')->name('table-belumverif');
 
 Route::view('/add', 'auth.adduser')->name('add-user');
 Route::view('/new-regis', 'auth.new-regis')->name('new-regis');

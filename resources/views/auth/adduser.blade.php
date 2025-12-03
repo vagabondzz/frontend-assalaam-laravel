@@ -19,7 +19,7 @@
                     </div>
                 </div>
 
-                 <form x-data="form" class="p-8" autocomplete="off" autocapitalize="off" spellcheck="false">
+                 <form id="memberForm" class="p-8" autocomplete="off" autocapitalize="off" spellcheck="false">
     @csrf
 
     <!-- SECTION 1: PERSONAL AKUN -->
@@ -40,22 +40,40 @@
             </div>
 
             <!-- Password -->
-            <div class="relative group">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
-                <div class="relative">
-                    <input type="password" name="password" id="password" placeholder="Masukan Password" autocomplete="new-password"
-                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
-                </div>
-            </div>
+           <div class="relative group">
+  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+  <div class="relative">
+    <input type="password" name="password" id="password"
+      placeholder="Masukan Password" autocomplete="new-password"
+      class="w-full px-4 py-3 pr-10 rounded-lg border-2 border-gray-200 focus:border-green-500 
+             focus:ring focus:ring-green-200 transition-all duration-200 outline-none 
+             dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white 
+             dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+    <!-- Icon mata -->
+    <button type="button" id="togglePassword"
+      class="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-300">
+      <ion-icon name="eye-outline" class="text-xl"></ion-icon>
+    </button>
+  </div>
+</div>
 
             <!-- Konfirmasi Password -->
             <div class="relative group">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Konfirmasi Password</label>
-                <div class="relative">
-                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Konfirmasi Password"
-                        class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
-                </div>
-            </div>
+  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Konfirmasi Password</label>
+  <div class="relative">
+    <input type="password" name="password_confirmation" id="password_confirmation"
+      placeholder="Konfirmasi Password"
+      class="w-full px-4 py-3 pr-10 rounded-lg border-2 border-gray-200 focus:border-green-500 
+             focus:ring focus:ring-green-200 transition-all duration-200 outline-none 
+             dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white 
+             dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+    <!-- Icon mata -->
+    <button type="button" id="toggleConfirmPassword"
+      class="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-300">
+      <ion-icon name="eye-outline" class="text-xl"></ion-icon>
+    </button>
+  </div>
+</div>
         </div>
     </div>
 
@@ -79,7 +97,19 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4 gap-6">
             <!-- No Identitas -->
-            <input type="text" name="MEMBER_KTP_NO" id="MEMBER_KTP_NO" placeholder="Masukan No. Identitas" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+            <!-- No Identitas -->
+        <div class="flex flex-col">
+            <input type="text" name="MEMBER_KTP_NO" id="MEMBER_KTP_NO" placeholder="Masukan NIK"
+        class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500
+        focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800
+        dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300]
+        dark:focus:border-[#F97300]">
+
+            <p id="error_nik" class="text-red-500 text-sm mt-1 hidden">
+        NIK harus 16 digit.
+            </p>
+        </div>
+
 
             <!-- Status -->
             <select name="MEMBER_IS_MARRIED" id="MEMBER_IS_MARRIED" class="w-full select rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
@@ -129,6 +159,7 @@
             <input type="text" id="MEMBER_KECAMATAN" name="MEMBER_KECAMATAN" placeholder="Masukan Kecamatan" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
             <input type="text" id="MEMBER_KOTA" name="MEMBER_KOTA" placeholder="Masukan Kota" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
             <input type="text" id="MEMBER_POST_CODE" name="MEMBER_POST_CODE" placeholder="Masukan Kode Pos" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+           
         </div>
     </div>
 
@@ -140,15 +171,13 @@
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <input type="tel" id="MEMBER_TELP" name="MEMBER_TELP" placeholder="Masukan No. HP" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
-            <input
-  type="number"
-  id="MEMBER_JML_TANGGUNGAN"
-  name="MEMBER_JML_TANGGUNGAN"
-  placeholder="Masukan Jumlah Tanggungan"
-  min="0"
-  step="1"
-  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+            <div class="flex flex-col">
+        <input type="text" id="MEMBER_TELP" name="MEMBER_TELP" placeholder="Masukan No. HP" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
+        <p id="error_hp" class="text-red-500 text-sm mt-1 hidden">Nomor HP minimal 9 digit.</p>
+        </div>
+
+            <!-- Jumlah Tanggungan -->
+        <input type="number" id="MEMBER_JML_TANGGUNGAN" name="MEMBER_JML_TANGGUNGAN" placeholder="Masukan Jumlah Tanggungan" min="0" step="1" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
 
             <input type="text" id="MEMBER_PENDAPATAN" name="MEMBER_PENDAPATAN" placeholder="Masukan Pendapatan Perbulan" class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition-all duration-200 outline-none dark:bg-gray-800 dark:border-gray-400/50 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#F97300] dark:focus:border-[#F97300]">
         </div>
@@ -177,18 +206,225 @@
         </div>
     </div>
 </div>
+<style>
+  #cssLoader {
+    animation: hideLoader 1s ease forwards;
+    animation-delay: 0.7s; /* lama loading di layar */
+  }
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  @keyframes hideLoader {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+</style>
+
+<!-- CSS ONLY LOADING OVERLAY -->
+<div 
+  id="cssLoader"
+  class="fixed inset-0 bg-black bg-opacity-50 
+         flex items-center justify-center 
+         z-[9999] opacity-100">
+
+  <div class="w-14 h-14 border-4 border-gray-300 border-t-green-500 
+              rounded-full animate-spin"></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
+function forceNumericOnly(input) {
+    input.addEventListener("input", () => {
+        input.value = input.value.replace(/\D/g, "");
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("form");
+
+    // ================= INPUT NUMERIC ONLY =================
+    [
+        "MEMBER_KTP_NO",
+        "MEMBER_TELP",
+        "MEMBER_RT",
+        "MEMBER_RW",
+        "MEMBER_POST_CODE",
+        "MEMBER_JML_TANGGUNGAN",
+        "MEMBER_PENDAPATAN"
+    ].forEach(id => forceNumericOnly(document.getElementById(id)));
+
+    const form = document.getElementById("memberForm");
     const token = localStorage.getItem("jwt_token_cs");
     const API_URL = "{{ api_url('/api/auth/cs/add-user-member') }}";
 
+    // ======================================================
+    // 🔥 PASSWORD TOGGLE (PERBAIKAN IKON MATA)
+    // ======================================================
+    function setupToggle(toggleId, inputId) {
+        const toggle = document.getElementById(toggleId);
+        const target = document.getElementById(inputId);
+
+        toggle.addEventListener("click", () => {
+            const show = target.type === "password";
+            target.type = show ? "text" : "password";
+
+            toggle.innerHTML =
+                `<ion-icon name="${show ? 'eye-off-outline' : 'eye-outline'}" class="text-xl"></ion-icon>`;
+        });
+    }
+
+    setupToggle("togglePassword", "password");
+    setupToggle("toggleConfirmPassword", "password_confirmation");
+
+    // ======================================================
+    // 🔥 INLINE ERROR HANDLER
+    // ======================================================
+    function clearInlineErrors() {
+        document.querySelectorAll(".inline-error").forEach(el => el.remove());
+        document.querySelectorAll(".error-border")
+            .forEach(e => e.classList.remove("border-red-500"));
+    }
+
+    function showInlineError(input, message) {
+        input.classList.add("border-red-500", "error-border");
+
+        // Jika sudah ada error sebelumnya, hapus dulu agar tidak numpuk
+        const next = input.nextElementSibling;
+        if (next && next.classList.contains("inline-error")) next.remove();
+
+        const error = document.createElement("p");
+        error.className = "inline-error text-red-500 text-xs mt-1";
+        error.textContent = message;
+
+        input.insertAdjacentElement("afterend", error);
+    }
+    function hideInlineError(input) {
+    input.classList.remove("border-red-500", "error-border");
+    const next = input.nextElementSibling;
+    if (next && next.classList.contains("inline-error")) next.remove();
+    }
+
+    // ======================================================
+    // 🔥 REALTIME EMAIL CHECK
+    // ======================================================
+    const emailInput = document.getElementById("email");
+    let emailCheckTimeout = null;
+
+    emailInput.addEventListener("input", () => {
+        clearInlineErrors();
+
+        const email = emailInput.value.trim();
+        if (!email || email.length < 5) return;
+
+        clearTimeout(emailCheckTimeout);
+
+        emailCheckTimeout = setTimeout(async () => {
+            try {
+                const res = await axios.post("{{ api_url('/api/member/check-email-add') }}", {
+                    email: email
+                });
+
+                if (res.data.exists) {
+                    showInlineError(emailInput, "Email sudah digunakan.");
+                }
+            } catch (error) {
+                console.error("Error cek email:", error);
+            }
+        }, 400);
+    });
+
+    // ======================================================
+    // 🔥 VALIDASI FRONTEND NIK & HP
+    // ======================================================
+    const nikInput = document.getElementById("MEMBER_KTP_NO");
+    let nikCheckTimeout = null;
+
+    nikInput.addEventListener("input", () => {
+    const nik = nikInput.value.trim();
+
+    // Reset error dulu
+    hideInlineError(nikInput);
+    clearTimeout(nikCheckTimeout);
+
+    // Hanya angka
+    if (!/^\d*$/.test(nik)) {
+        showInlineError(nikInput, "NIK hanya boleh angka.");
+        return;
+    }
+
+    // Jika kosong → tidak tampilkan error
+    if (nik.length === 0) return;
+
+    // VALIDASI UTAMA → HARUS 16 DIGIT
+    if (nik.length < 16) {
+        showInlineError(nikInput, "NIK harus 16 digit (kurang).");
+        return;
+    }
+
+    if (nik.length > 16) {
+        showInlineError(nikInput, "NIK harus 16 digit (kelebihan).");
+        return;
+    }
+
+    // Jika tepat 16 → baru cek server
+    nikCheckTimeout = setTimeout(async () => {
+        try {
+            const res = await axios.post("{{ api_url('/api/member/check-nik-add') }}", {
+                nik: nik
+            });
+
+            if (res.data.exists) {
+                showInlineError(nikInput, "NIK sudah terdaftar.");
+            }
+
+        } catch (err) {
+            console.error("Error cek NIK:", err);
+        }
+    }, 400);
+});
+
+
+    const hpInput = document.getElementById("MEMBER_TELP");
+    hpInput.addEventListener("input", () => {
+        hpInput.classList.remove("border-red-500");
+        const err = hpInput.nextElementSibling;
+        if (err?.classList.contains("inline-error")) err.remove();
+
+        if (hpInput.value.length > 0 && hpInput.value.length < 9) {
+            showInlineError(hpInput, "Nomor HP minimal 9 digit.");
+        }
+    });
+
+    // ======================================================
+    // 🔥 VALIDASI PASSWORD & KONFIRMASI
+    // ======================================================
+    function validatePassword() {
+        const pw = document.getElementById("password");
+        const cpw = document.getElementById("password_confirmation");
+
+        if (pw.value.length < 6) {
+            showInlineError(pw, "Password minimal 6 karakter.");
+            return false;
+        }
+
+        if (pw.value !== cpw.value) {
+            showInlineError(cpw, "Konfirmasi password tidak cocok.");
+            return false;
+        }
+
+        return true;
+    }
+
+    // ======================================================
+    // 🔥 SUBMIT FORM
+    // ======================================================
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        clearInlineErrors();
+
+        // ⛔ VALIDASI PASSWORD TERLEBIH DAHULU
+        if (!validatePassword()) return;
 
         const formData = new FormData(form);
 
@@ -197,45 +433,64 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": token ? `Bearer ${token}` : ""
-                },
+                }
             });
 
+            // ================= SUCCESS =================
             if (res.data.success) {
                 Swal.fire({
-                    text: "Registrasi berhasil. Akun kamu menunggu verifikasi CS.",
+
+                    icon: "success",
+                    title: "Berhasil!",
+                    text: "Registrasi berhasil. Akun menunggu verifikasi CS.",
                     timer: 2500,
-                    showConfirmButton: false,
+                    showConfirmButton: false
                 });
+
                 form.reset();
-            } else {
-                Swal.fire({
-                    text: res.data.message || "Terjadi kesalahan pada registrasi.",
-                    timer: 2500,
-                    showConfirmButton: false,
-                });
+                return;
             }
+
         } catch (err) {
-            console.error(err);
-            let msg = "";
+    console.error(err);
 
-            if (err.response) {
-                msg =
-                    err.response.data?.message ||
-                    (Object.values(err.response.data?.errors || {})[0]?.[0]) ||
-                    msg;
+    // Error Laravel (validasi)
+    if (err.response?.data?.errors) {
+        const errors = err.response.data.errors;
+
+        Object.keys(errors).forEach(field => {
+            const input = document.querySelector(`[name="${field}"]`);
+            if (input) {
+                showInlineError(input, errors[field][0]);
             }
+        });
 
-            Swal.fire({
-                text: msg || "Registrasi gagal. Silakan coba lagi.",
-                timer: 2500,
-                showConfirmButton: false,
-            });
-        }
+        return;
+    }
+
+    // Error email unik
+    if (err.response?.data?.message?.toLowerCase().includes("email")) {
+        showInlineError(emailInput, err.response.data.message);
+
+        Swal.fire({
+            icon: "error",
+            title: "Email Tidak Valid",
+            text: err.response.data.message
+        });
+
+        return;
+    }
+
+    // 🔥 Fallback error (selalu tampilkan pesan asli server)
+    Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: err.response?.data?.message || "Terjadi kesalahan, silakan coba lagi.",
     });
-    document.getElementById('MEMBER_JML_TANGGUNGAN').addEventListener('input', (e) => {
-  if (e.target.value < 0) e.target.value = 0;
-});
+}
+
+    });
+
 });
 </script>
-
 @include('include.htmlend')

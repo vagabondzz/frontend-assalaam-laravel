@@ -34,6 +34,30 @@
         <div x-show="error" class="mt-4 text-red-500" x-text="error"></div>
     </main>
 </div>
+<style>
+  #cssLoader {
+    animation: hideLoader 1s ease forwards;
+    animation-delay: 0.7s; /* lama loading di layar */
+  }
+
+  @keyframes hideLoader {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+</style>
+
+<!-- CSS ONLY LOADING OVERLAY -->
+<div 
+  id="cssLoader"
+  class="fixed inset-0 bg-black bg-opacity-50 
+         flex items-center justify-center 
+         z-[9999] opacity-100">
+
+  <div class="w-14 h-14 border-4 border-gray-300 border-t-green-500 
+              rounded-full animate-spin"></div>
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
